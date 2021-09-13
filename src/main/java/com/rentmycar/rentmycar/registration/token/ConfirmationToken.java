@@ -32,4 +32,12 @@ public class ConfirmationToken {
         this.expired_at = expired_at;
         this.user = user;
     }
+
+    public LocalDateTime getConfirmedAt() {
+        return this.confirmed_at;
+    }
+
+    public LocalDateTime getExpiresAt() {
+        return this.expired_at;
+    }
 }
