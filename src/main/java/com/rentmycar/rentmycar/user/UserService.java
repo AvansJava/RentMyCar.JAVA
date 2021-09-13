@@ -1,5 +1,7 @@
 package com.rentmycar.rentmycar.user;
 
+import com.rentmycar.rentmycar.registration.token.ConfirmationToken;
+import com.rentmycar.rentmycar.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -7,7 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -16,6 +20,7 @@ public class UserService implements UserDetailsService {
     private final static String USER_NOT_FOUND = "User with e-mail %s not found.";
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
 
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -39,8 +44,19 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(user);
 
-        // TODO: send confirmation token
+        // Create confirmation token
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(60),
+                user
+        );
 
-        return "works";
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        // TODO: send e-mail with token
+
+        return token;
     }
 }
