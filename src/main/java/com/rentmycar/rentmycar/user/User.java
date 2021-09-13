@@ -1,14 +1,24 @@
 package com.rentmycar.rentmycar.user;
 
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "user")
-public class User {
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,133 +32,56 @@ public class User {
     private String phone_number;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private UserRole user_role;
+    private Boolean locked = false;
+    private Boolean enabled = false;
     @CreationTimestamp
     private LocalDateTime created_at;
     @UpdateTimestamp
     private LocalDateTime updated_at;
 
-    public User() {
-    }
-
-    public User(Long id, String first_name, String last_name, String street, String house_number, String postal_code,
-                String city, String country, String phone_number, String email, String password,
-                LocalDateTime created_at, LocalDateTime updated_at) {
-        this.id = id;
+    public User(String first_name, String last_name, String email, String password, UserRole user_role) {
         this.first_name = first_name;
         this.last_name = last_name;
-        this.street = street;
-        this.house_number = house_number;
-        this.postal_code = postal_code;
-        this.city = city;
-        this.country = country;
-        this.phone_number = phone_number;
         this.email = email;
         this.password = password;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.user_role = user_role;
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user_role.name());
+        return Collections.singletonList(authority);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirst_name() {
-        return first_name;
-    }
-
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getLast_name() {
-        return last_name;
-    }
-
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getHouse_number() {
-        return house_number;
-    }
-
-    public void setHouse_number(String house_number) {
-        this.house_number = house_number;
-    }
-
-    public String getPostal_code() {
-        return postal_code;
-    }
-
-    public void setPostal_code(String postal_code) {
-        this.postal_code = postal_code;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getPhone_number() {
-        return phone_number;
-    }
-
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public String getUsername() {
+        return email;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
     }
 
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public void setUpdated_at(LocalDateTime updated_at) {
-        this.updated_at = updated_at;
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 }
