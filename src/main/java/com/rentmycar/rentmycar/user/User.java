@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.user;
 
+import com.rentmycar.rentmycar.car.Car;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,6 +12,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -40,6 +43,14 @@ public class User implements UserDetails {
     private LocalDateTime created_at;
     @UpdateTimestamp
     private LocalDateTime updated_at;
+
+    @ManyToMany
+    @JoinTable (
+            name="user_car",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "car_id")
+    )
+    private Set<Car> userCars = new HashSet<>();
 
     public User(String first_name, String last_name, String email, String password, UserRole user_role) {
         this.first_name = first_name;
@@ -84,4 +95,9 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
+    public Set<Car> getUserCars() {
+        return userCars;
+    }
+
 }

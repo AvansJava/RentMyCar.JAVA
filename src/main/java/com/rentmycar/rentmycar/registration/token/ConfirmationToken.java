@@ -1,7 +1,6 @@
 package com.rentmycar.rentmycar.registration.token;
 
 import com.rentmycar.rentmycar.user.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,17 +12,18 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "confirmation_token")
 public class ConfirmationToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
     private String token;
     private LocalDateTime created_at;
     private LocalDateTime expired_at;
     private LocalDateTime confirmed_at;
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "user_id")
-    private User user;
 
     public ConfirmationToken(String token, LocalDateTime created_at, LocalDateTime expired_at,
                              User user) {

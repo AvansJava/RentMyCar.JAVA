@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS `timeslot`;
+CREATE TABLE `timeslot` (
+    `id` BIGINT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `start_at` TIME NOT NULL,
+    `end_at` TIME NOT NULL,
+    CONSTRAINT pk_timeslot PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
