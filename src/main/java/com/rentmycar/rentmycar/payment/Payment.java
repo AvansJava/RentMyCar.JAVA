@@ -1,5 +1,6 @@
-package com.rentmycar.rentmycar.location;
+package com.rentmycar.rentmycar.payment;
 
+import com.rentmycar.rentmycar.reservation.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,23 +13,22 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "location")
+@Table(name = "payment")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Location {
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String street;
-    private String house_number;
-    private String postal_code;
-    private String city;
-    private String country;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "reservation_number")
+    private Reservation reservation;
+    private BigDecimal price;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    private LocalDateTime paid_at;
     @CreationTimestamp
     private LocalDateTime created_at;
     @UpdateTimestamp

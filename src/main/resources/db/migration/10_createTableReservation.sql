@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS `reservation`;
+CREATE TABLE `reservation` (
+   `reservation_number` VARCHAR(10) NOT NULL,
+   `user_id` BIGINT(10) UNSIGNED NOT NULL,
+   `price` DECIMAL(12,2) UNSIGNED DEFAULT NULL,
+   `status` ENUM('COMPLETED','PENDING', 'CANCELED', 'EXPIRED') NOT NULL,
+   `paid_at` DATETIME DEFAULT NULL,
+   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   CONSTRAINT pk_reservation PRIMARY KEY (`reservation_number`),
+   CONSTRAINT fk_user_reservation FOREIGN KEY (`user_id`)
+   REFERENCES user(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

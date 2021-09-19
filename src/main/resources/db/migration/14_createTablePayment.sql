@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS `payment`;
+CREATE TABLE `payment` (
+     `id` BIGINT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+     `reservation_number` VARCHAR(10) NOT NULL,
+     `price` DECIMAL(12,2) UNSIGNED DEFAULT NULL,
+     `status` ENUM('SUCCESS','PENDING','EXPIRED','FAILED','CANCELED') NOT NULL,
+     `paid_at` DATETIME DEFAULT NULL,
+     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     CONSTRAINT pk_payment PRIMARY KEY (`id`),
+     CONSTRAINT fk_payment_reservation FOREIGN KEY (`reservation_number`)
+     REFERENCES reservation(`reservation_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

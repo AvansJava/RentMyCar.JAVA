@@ -1,9 +1,12 @@
-package com.rentmycar.rentmycar.location;
+package com.rentmycar.rentmycar.rentalplan;
 
+import com.rentmycar.rentmycar.car.Car;
+import com.rentmycar.rentmycar.insurance.Insurance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.tomcat.jni.Local;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,23 +15,25 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "location")
+@Table(name = "rental_plan")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Location {
+public class RentalPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String street;
-    private String house_number;
-    private String postal_code;
-    private String city;
-    private String country;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "car_id")
+    private Car car;
+    private LocalDateTime available_from;
+    private LocalDateTime available_until;
+    private BigDecimal price;
+    private int distance;
+    @OneToOne
+    @JoinColumn(nullable = false, name = "insurance_type_id")
+    private Insurance insurance_type_id;
     @CreationTimestamp
     private LocalDateTime created_at;
     @UpdateTimestamp
