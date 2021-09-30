@@ -23,14 +23,14 @@ public class Location {
     private Long id;
     private String name;
     private String street;
-    private String house_number;
-    private String postal_code;
+    private String houseNumber;
+    private String postalCode;
     private String city;
     private String country;
     private BigDecimal latitude;
     private BigDecimal longitude;
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }

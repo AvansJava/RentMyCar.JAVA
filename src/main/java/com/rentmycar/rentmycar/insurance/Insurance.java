@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Setter
 public class Insurance {
     @Id
-    private String insurance_type_id;
+    private String insuranceTypeId;
     private String description;
     private BigDecimal price;
 }

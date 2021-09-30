@@ -21,23 +21,23 @@ public class ConfirmationToken {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
     private String token;
-    private LocalDateTime created_at;
-    private LocalDateTime expired_at;
-    private LocalDateTime confirmed_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime expiredAt;
+    private LocalDateTime confirmedAt;
 
-    public ConfirmationToken(String token, LocalDateTime created_at, LocalDateTime expired_at,
+    public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiredAt,
                              User user) {
         this.token = token;
-        this.created_at = created_at;
-        this.expired_at = expired_at;
+        this.createdAt = createdAt;
+        this.expiredAt = expiredAt;
         this.user = user;
     }
 
     public LocalDateTime getConfirmedAt() {
-        return this.confirmed_at;
+        return this.confirmedAt;
     }
 
     public LocalDateTime getExpiresAt() {
-        return this.expired_at;
+        return this.expiredAt;
     }
 }

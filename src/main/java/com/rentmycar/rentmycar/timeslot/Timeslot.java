@@ -18,6 +18,6 @@ public class Timeslot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Time start_at;
-    private Time end_at;
+    private Time startAt;
+    private Time endAt;
 }

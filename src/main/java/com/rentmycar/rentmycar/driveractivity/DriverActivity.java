@@ -28,14 +28,14 @@ public class DriverActivity {
     @ManyToOne
     @JoinColumn(nullable = false, name = "reservation_number")
     private Reservation reservation;
-    private int distance_driven;
-    private int top_speed;
-    private int average_speed;
+    private int distanceDriven;
+    private int topSpeed;
+    private int averageSpeed;
     private int acceleration;
     private int brake;
-    private LocalDateTime last_synced_at;
+    private LocalDateTime lastSyncedAt;
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }

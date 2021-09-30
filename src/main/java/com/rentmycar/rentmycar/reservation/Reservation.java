@@ -20,16 +20,16 @@ import java.time.LocalDateTime;
 @Setter
 public class Reservation {
     @Id
-    private String reservation_number;
+    private String reservationNumber;
     @ManyToOne
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
     private Status status;
-    private LocalDateTime paid_at;
+    private LocalDateTime paidAt;
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }

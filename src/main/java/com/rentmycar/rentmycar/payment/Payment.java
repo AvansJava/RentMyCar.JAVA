@@ -28,9 +28,9 @@ public class Payment {
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
     private Status status;
-    private LocalDateTime paid_at;
+    private LocalDateTime paidAt;
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }

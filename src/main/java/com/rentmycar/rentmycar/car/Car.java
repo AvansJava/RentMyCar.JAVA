@@ -26,7 +26,7 @@ public class Car {
     private Long id;
     private String name;
     private String brand;
-    private String brand_type;
+    private String brandType;
     @ManyToOne
     @JoinColumn(nullable = false, name = "car_type_id")
     private CarType carType;
@@ -39,9 +39,9 @@ public class Car {
     @JoinColumn(nullable = false, name = "location_id")
     private Location location;
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "userCars")
     private Set<User> userCars = new HashSet<>();

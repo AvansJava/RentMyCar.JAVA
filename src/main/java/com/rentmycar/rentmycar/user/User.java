@@ -25,24 +25,24 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String street;
-    private String house_number;
-    private String postal_code;
+    private String houseNumber;
+    private String postalCode;
     private String city;
     private String country;
-    private String phone_number;
+    private String phoneNumber;
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
-    private UserRole user_role;
+    private UserRole userRole;
     private Boolean locked = false;
     private Boolean enabled = false;
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 
     @ManyToMany
     @JoinTable (
@@ -52,17 +52,17 @@ public class User implements UserDetails {
     )
     private Set<Car> userCars = new HashSet<>();
 
-    public User(String first_name, String last_name, String email, String password, UserRole user_role) {
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public User(String firstName, String lastName, String email, String password, UserRole userRole) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.user_role = user_role;
+        this.userRole = userRole;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user_role.name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
         return Collections.singletonList(authority);
     }
 

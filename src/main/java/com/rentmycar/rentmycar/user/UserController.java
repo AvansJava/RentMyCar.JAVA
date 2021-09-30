@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/rentmycarapi/v1.0/user")
+@RequestMapping(path = "/api/v1.0/user")
 public class UserController {
 
     private final UserService userService;
@@ -20,5 +20,10 @@ public class UserController {
     @GetMapping
     public List<User> getUsers() {
         return userService.getUsers();
+    }
+
+    @PutMapping("/{id}")
+    public User updateUser(@RequestBody User user) {
+        return userService.updateUser(user);
     }
 }

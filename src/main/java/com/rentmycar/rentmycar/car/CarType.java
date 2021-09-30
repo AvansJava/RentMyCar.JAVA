@@ -17,6 +17,6 @@ import javax.persistence.Table;
 @Setter
 public class CarType {
     @Id
-    private String car_type_id;
+    private String carTypeId;
     private String description;
 }

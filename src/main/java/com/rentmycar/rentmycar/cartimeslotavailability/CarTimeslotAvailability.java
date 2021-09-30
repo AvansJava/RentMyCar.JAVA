@@ -32,12 +32,12 @@ public class CarTimeslotAvailability {
     @OneToOne
     @JoinColumn(nullable = false, name = "product_id")
     private Product product;
-    private LocalDateTime start_at;
-    private LocalDateTime end_at;
+    private LocalDateTime startAt;
+    private LocalDateTime endAt;
     @Enumerated(EnumType.STRING)
     private Status status;
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }

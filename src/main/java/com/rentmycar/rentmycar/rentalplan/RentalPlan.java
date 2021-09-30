@@ -27,15 +27,15 @@ public class RentalPlan {
     @ManyToOne
     @JoinColumn(nullable = false, name = "car_id")
     private Car car;
-    private LocalDateTime available_from;
-    private LocalDateTime available_until;
+    private LocalDateTime availableFrom;
+    private LocalDateTime availableUntil;
     private BigDecimal price;
     private int distance;
     @OneToOne
     @JoinColumn(nullable = false, name = "insurance_type_id")
-    private Insurance insurance_type_id;
+    private Insurance insuranceTypeId;
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }
