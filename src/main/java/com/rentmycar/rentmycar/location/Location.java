@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "location")
@@ -21,14 +22,15 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
     private String street;
     private String houseNumber;
     private String postalCode;
     private String city;
     private String country;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    @Column(precision=10, scale=6)
+    private Float latitude;
+    @Column(precision=10, scale=6)
+    private Float longitude;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

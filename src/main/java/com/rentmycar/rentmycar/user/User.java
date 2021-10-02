@@ -33,6 +33,7 @@ public class User implements UserDetails {
     private String city;
     private String country;
     private String phoneNumber;
+    private String iban;
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)

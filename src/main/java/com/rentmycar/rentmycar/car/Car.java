@@ -24,14 +24,10 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
     private String brand;
     private String brandType;
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "car_type_id")
-    private CarType carType;
-    private int mileage;
-    private int consumption;
+    private String model;
+    private String licensePlateNumber;
     @OneToOne
     @JoinColumn(nullable = false, name = "user_id")
     private User user;

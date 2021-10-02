@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Table(name = "insurance")
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 public class Insurance {
     @Id
     private String insuranceTypeId;
-    private String description;
+    private String nameTranslationTag;
+    private UUID descriptionTranslationTag;
     private BigDecimal price;
 }
