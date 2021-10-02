@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -22,14 +23,14 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
-    public String register(RegistrationRequest request) {
+    public UUID register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
 
         if (!isValidEmail) {
             throw new IllegalStateException("E-mail invalid.");
         }
 
-        String token = userService.registerUser(new User(
+        UUID token = userService.registerUser(new User(
                 request.getFirstName(),
                 request.getLastName(),
                 request.getEmail(),
@@ -44,7 +45,7 @@ public class RegistrationService {
     }
 
     @Transactional
-    public String confirmToken(String token) {
+    public String confirmToken(UUID token) {
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token).orElseThrow(() ->
                 new IllegalStateException("token not found"));
 

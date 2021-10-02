@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,12 +21,12 @@ public class ConfirmationToken {
     @ManyToOne
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
-    private String token;
+    private UUID token;
     private LocalDateTime createdAt;
     private LocalDateTime expiredAt;
     private LocalDateTime confirmedAt;
 
-    public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiredAt,
+    public ConfirmationToken(UUID token, LocalDateTime createdAt, LocalDateTime expiredAt,
                              User user) {
         this.token = token;
         this.createdAt = createdAt;

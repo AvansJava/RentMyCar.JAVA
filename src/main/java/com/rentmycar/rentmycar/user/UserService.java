@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
                 new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
     }
 
-    public String registerUser(User user) {
+    public UUID registerUser(User user) {
         boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
 
         if (userExists) {
@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
         // Create confirmation token
-        String token = UUID.randomUUID().toString();
+        UUID token = UUID.randomUUID();
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),

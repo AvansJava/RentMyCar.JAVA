@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -18,11 +19,11 @@ public class ConfirmationTokenService {
         confirmationTokenRepository.save(token);
     }
 
-    public Optional<ConfirmationToken> getToken(String token) {
+    public Optional<ConfirmationToken> getToken(UUID token) {
         return confirmationTokenRepository.findByToken(token);
     }
 
-    public int setConfirmedAt(String token) {
+    public int setConfirmedAt(UUID token) {
         return confirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
     }
 }
