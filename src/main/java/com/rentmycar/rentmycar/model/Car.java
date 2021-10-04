@@ -40,11 +40,4 @@ public class Car {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    @ManyToMany(mappedBy = "userCars")
-    private Set<User> userCars = new HashSet<>();
-
-    public Set<User> getUserCars() {
-        return userCars;
-    }
 }

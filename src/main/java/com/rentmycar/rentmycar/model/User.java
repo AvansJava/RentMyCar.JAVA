@@ -45,14 +45,6 @@ public class User implements UserDetails {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToMany
-    @JoinTable (
-            name="user_car",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "car_id")
-    )
-    private Set<Car> userCars = new HashSet<>();
-
     public User(String firstName, String lastName, String email, String password, UserRole userRole) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -96,9 +88,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
-
-    public Set<Car> getUserCars() {
-        return userCars;
-    }
-
 }
