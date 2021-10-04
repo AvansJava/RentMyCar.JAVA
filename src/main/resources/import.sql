@@ -57,8 +57,8 @@ VALUES ('Ernst Casimirstraat','21','4811KS','Breda','Nederland', 51.585154037140
        ('Meidoornpad', '11', '9713NM', 'Groningen', 'Nederland', 53.22400126117017, 6.585193827500725, CURRENT_TIMESTAMP),
        ('Bloemenblauwtje', '74', '4814TT', 'Breda', 'Nederland', 51.59223154103231, 4.745041429181561, CURRENT_TIMESTAMP);
 
-INSERT INTO car (brand, brand_type, model, license_plate_number, fuel_consumption, power_consumption, hydrogen_consumption, created_at, dtype, location_id, user_id)
-VALUES ('Honda', 'H-RV', 'EX-L', '465-HK-3', 5.7, NULL, NULL, CURRENT_TIMESTAMP, 'ICE', 1, 1),
-       ('Volkswagen', 'Polo', '1.6 TDI', '4-YY-685', 4.45, NULL, NULL, CURRENT_TIMESTAMP, 'ICE', 2, 2),
-       ('Hyundai', 'ix35', 'FCEV', '739-PD-2', NULL, NULL, 0.59, CURRENT_TIMESTAMP, 'FCEV', 3, 3),
-       ('Peugeot', '208', 'e', '3-UP-869', NULL, 16.4, NULL, CURRENT_TIMESTAMP, 'BEV', 4, 4);
+INSERT INTO car (brand, brand_type, model, license_plate_number, consumption, created_at, car_type, location_id, user_id)
+VALUES ('Honda', 'H-RV', 'EX-L', '465-HK-3', 5.7, CURRENT_TIMESTAMP, 'ICE', 1, 1),
+       ('Volkswagen', 'Polo', '1.6 TDI', '4-YY-685', 4.45, CURRENT_TIMESTAMP, 'ICE', 2, 2),
+       ('Hyundai', 'ix35', 'FCEV', '739-PD-2', 0.59, CURRENT_TIMESTAMP, 'FCEV', 3, 3),
+       ('Peugeot', '208', 'e', '3-UP-869', 16.4, CURRENT_TIMESTAMP, 'BEV', 4, 4);

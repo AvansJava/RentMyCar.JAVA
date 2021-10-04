@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.model;
 
+import com.rentmycar.rentmycar.enums.CarType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,9 @@ public class Car {
     private String brandType;
     private String model;
     private String licensePlateNumber;
+    private Double consumption;
+    @Enumerated(EnumType.STRING)
+    private CarType carType;
     @OneToOne
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
