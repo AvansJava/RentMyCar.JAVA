@@ -1,6 +1,6 @@
 package com.rentmycar.rentmycar.datalayer;
 
-public class CarDetail {
+public class CarList {
     private String Brand;
 
     public String getBrand() {
