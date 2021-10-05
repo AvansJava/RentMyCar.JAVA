@@ -26,12 +26,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean());
+        authenticationFilter.setFilterProcessesUrl("/api/v1.0/auth/login");
+
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/api/v1.0/register/**").permitAll();
-        http.authorizeRequests().antMatchers("/api/v1.0/login").permitAll();
+        http.authorizeRequests().antMatchers("/api/v1.0/auth/register/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/v1.0/auth/login/**").permitAll();
         http.authorizeRequests().antMatchers("/api/v1.0/**").hasAnyAuthority("USER");
-        http.addFilter(new AuthenticationFilter(authenticationManagerBean()));
+        http.addFilter(authenticationFilter);
         http.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
