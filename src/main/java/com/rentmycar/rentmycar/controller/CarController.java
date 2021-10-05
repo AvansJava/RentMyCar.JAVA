@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.controller;
 
+import com.rentmycar.rentmycar.datalayer.CarDetail;
 import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,8 @@ public class CarController {
     }
 
     @GetMapping
-    public List<Car> getCars() {
-        return carService.getCars();
+    public List<CarDetail> getCars() {
+        List <CarDetail> cars = carService.getCarDetail();
+        return cars;
     }
 }
