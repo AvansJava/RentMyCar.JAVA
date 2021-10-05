@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.service;
 
+import com.rentmycar.rentmycar.exception.InvalidEmailException;
 import com.rentmycar.rentmycar.model.request.RegistrationRequest;
 import com.rentmycar.rentmycar.util.EmailSender;
 import com.rentmycar.rentmycar.model.ConfirmationToken;
@@ -23,10 +24,11 @@ public class RegistrationService {
     private final EmailSender emailSender;
 
     public UUID register(RegistrationRequest request) {
-        boolean isValidEmail = emailValidator.test(request.getEmail());
+        String email = request.getEmail();
+        boolean isValidEmail = emailValidator.test(email);
 
         if (!isValidEmail) {
-            throw new IllegalStateException("E-mail invalid.");
+            throw new InvalidEmailException(email);
         }
 
         UUID token = userService.registerUser(new User(
