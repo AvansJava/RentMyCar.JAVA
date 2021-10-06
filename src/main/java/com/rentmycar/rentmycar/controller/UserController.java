@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}/")
-    public User updateUser(@RequestBody User user) {
+    public User putUser(@RequestBody User user) {
         return userService.updateUser(user);
     }
 }

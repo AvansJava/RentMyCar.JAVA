@@ -2,37 +2,45 @@ package com.rentmycar.rentmycar.controller;
 
 import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.service.LocationService;
-import com.sun.istack.NotNull;
+import com.rentmycar.rentmycar.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(path="api/v1.0/location/")
 public class LocationController {
 
     private final LocationService locationService;
+    private final UserService userService;
 
     @Autowired
-    public LocationController(LocationService locationService) {
+    public LocationController(LocationService locationService, UserService userService) {
         this.locationService = locationService;
+        this.userService = userService;
     }
 
+//TODO fix validation, @valid doesn't seem to work now
     @PostMapping
     public Location postLocation(@Valid @RequestBody Location location) {
-        String email = SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal().toString();
-
+        String email = userService.getAuthenticatedUserEmail();
         return locationService.createLocation(location, email);
     }
 
     @PutMapping(path = "{id}/")
-    public Location putLocation(@PathVariable("id") Long id, @NotNull @RequestBody Location newLocation) {
-        String email = SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal().toString();
-
+    public Location putLocation(@Valid @PathVariable("id") Long id, @RequestBody Location newLocation) {
+        String email = userService.getAuthenticatedUserEmail();
         return locationService.updateLocation(id, newLocation, email);
     }
+
+    @GetMapping
+    public List<Location> getLocationsByUser() {
+        String email = userService.getAuthenticatedUserEmail();
+        return locationService.getLocationsByUser(email);
+    }
+
+    
 }

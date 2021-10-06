@@ -45,4 +45,11 @@ public class ApiExceptionHandler {
     public String handleLocationUserMismatchException(LocationUserMismatchException e) {
         return e.getMessage();
     }
+
+    @ExceptionHandler(NoLocationsFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNoLocationsFoundException(NoLocationsFoundException e) {
+        return e.getMessage();
+    }
 }
