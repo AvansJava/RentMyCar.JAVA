@@ -1,6 +1,7 @@
 package com.rentmycar.rentmycar.service;
 
 import com.rentmycar.rentmycar.exception.CarAlreadyExistsException;
+import com.rentmycar.rentmycar.exception.UserNotFoundException;
 import org.modelmapper.ModelMapper;
 
 import com.rentmycar.rentmycar.datalayer.CarList;
@@ -48,7 +49,8 @@ public class CarService {
             throw new CarAlreadyExistsException(licensePlateNumber);
         }
 
-        User user = userRepository.findByEmail(email).stream().findFirst().orElse(null);
+        User user = userRepository.findByEmail(email).stream().findFirst().orElseThrow(
+                () -> new UserNotFoundException(email));
         car.setUser(user);
 
         Location location = car.getLocation();

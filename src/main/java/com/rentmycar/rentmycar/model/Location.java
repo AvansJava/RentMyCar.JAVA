@@ -31,6 +31,9 @@ public class Location {
     private Float latitude;
     @Column(precision=10, scale=6)
     private Float longitude;
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

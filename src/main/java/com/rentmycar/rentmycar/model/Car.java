@@ -26,14 +26,15 @@ public class Car {
     private String brand;
     private String brandType;
     private String model;
+    @Column(unique = true)
     private String licensePlateNumber;
     private Double consumption;
     @Enumerated(EnumType.STRING)
     private CarType carType;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false, name = "location_id")
     private Location location;
     @CreationTimestamp

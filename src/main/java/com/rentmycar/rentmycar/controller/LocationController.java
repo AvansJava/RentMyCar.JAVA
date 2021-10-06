@@ -2,11 +2,12 @@ package com.rentmycar.rentmycar.controller;
 
 import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.service.LocationService;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path="api/v1.0/location/")
@@ -20,7 +21,18 @@ public class LocationController {
     }
 
     @PostMapping
-    public Location postLocation(@RequestBody Location location) {
-        return locationService.createLocation(location);
+    public Location postLocation(@Valid @RequestBody Location location) {
+        String email = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+
+        return locationService.createLocation(location, email);
+    }
+
+    @PutMapping(path = "{id}/")
+    public Location putLocation(@PathVariable("id") Long id, @NotNull @RequestBody Location newLocation) {
+        String email = SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
+
+        return locationService.updateLocation(id, newLocation, email);
     }
 }

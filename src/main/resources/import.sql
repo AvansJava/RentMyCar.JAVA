@@ -51,11 +51,11 @@ VALUES ('c301da85-3034-474a-9ff1-e19441e89414','NL','All risk verzekering'),
        ('c9077a96-712b-4a6f-920b-4d12b7495388','NL','Basis verzekering bij diefstal schade of pech, ook in het buitenland. €300,- eigen risico.'),
        ('c9077a96-712b-4a6f-920b-4d12b7495388','EN','Basic insurance in case of theft, damage or breakdown, also internationally. €300,- excess.');
 
-INSERT INTO location (street, house_number, postal_code, city, country, latitude, longitude, created_at)
-VALUES ('Ernst Casimirstraat','21','4811KS','Breda','Nederland', 51.585154037140306, 4.770362791146651, CURRENT_TIMESTAMP),
-       ('Mozartlaan', '230', '5011SW', 'Tilburg', 'Nederland', 51.58014601022593, 5.075165935722362, CURRENT_TIMESTAMP),
-       ('Meidoornpad', '11', '9713NM', 'Groningen', 'Nederland', 53.22400126117017, 6.585193827500725, CURRENT_TIMESTAMP),
-       ('Bloemenblauwtje', '74', '4814TT', 'Breda', 'Nederland', 51.59223154103231, 4.745041429181561, CURRENT_TIMESTAMP);
+INSERT INTO location (street, house_number, postal_code, city, country, latitude, longitude, user_id, created_at)
+VALUES ('Ernst Casimirstraat','21','4811KS','Breda','Nederland', 51.585154037140306, 4.770362791146651, 1, CURRENT_TIMESTAMP),
+       ('Mozartlaan', '230', '5011SW', 'Tilburg', 'Nederland', 51.58014601022593, 5.075165935722362, 2, CURRENT_TIMESTAMP),
+       ('Meidoornpad', '11', '9713NM', 'Groningen', 'Nederland', 53.22400126117017, 6.585193827500725, 3, CURRENT_TIMESTAMP),
+       ('Bloemenblauwtje', '74', '4814TT', 'Breda', 'Nederland', 51.59223154103231, 4.745041429181561, 4, CURRENT_TIMESTAMP);
 
 INSERT INTO car (brand, brand_type, model, license_plate_number, consumption, created_at, car_type, location_id, user_id)
 VALUES ('Honda', 'H-RV', 'EX-L', '465-HK-3', 5.7, CURRENT_TIMESTAMP, 'ICE', 1, 1),

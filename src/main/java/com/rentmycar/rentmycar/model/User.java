@@ -40,6 +40,7 @@ public class User implements UserDetails {
     private String phoneNumber;
     private String iban;
     @NotNull
+    @Column(unique = true)
     private String email;
     @NotNull
     @Size(min = 6)
