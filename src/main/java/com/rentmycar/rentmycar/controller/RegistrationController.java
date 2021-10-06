@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "api/v1.0/auth/register")
+@RequestMapping(path = "api/v1.0/auth/register/")
 @AllArgsConstructor
 public class RegistrationController {
 
@@ -19,7 +19,7 @@ public class RegistrationController {
         return registrationService.register(request);
     }
 
-    @GetMapping(path = "confirm")
+    @GetMapping(path = "confirm/")
     public String confirm(@RequestParam("token") UUID token) {
         return registrationService.confirmToken(token);
     }

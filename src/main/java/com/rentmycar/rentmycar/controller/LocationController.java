@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path="api/v1.0/location")
+@RequestMapping(path="api/v1.0/location/")
 public class LocationController {
 
     private final LocationService locationService;

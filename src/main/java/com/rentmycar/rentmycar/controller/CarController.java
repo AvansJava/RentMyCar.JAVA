@@ -1,14 +1,11 @@
 package com.rentmycar.rentmycar.controller;
 
-import com.rentmycar.rentmycar.exception.InvalidEmailException;
 import com.rentmycar.rentmycar.model.Car;
-import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.datalayer.CarList;
 import com.rentmycar.rentmycar.service.CarService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
