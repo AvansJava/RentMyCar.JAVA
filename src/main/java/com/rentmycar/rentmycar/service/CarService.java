@@ -26,10 +26,6 @@ public class CarService {
     private ModelMapper modelMapper;
 
     @Autowired
-    public CarService(CarRepository carRepository, LocationRepository locationRepository, UserRepository userRepository) {
-    
-
-    @Autowired
     public CarService(CarRepository carRepository, LocationRepository locationRepository, 
      UserRepository userRepository, ModelMapper modelMapper) {
         this.carRepository = carRepository;
