@@ -1,10 +1,12 @@
 package com.rentmycar.rentmycar.service;
 
 import com.rentmycar.rentmycar.model.ConfirmationToken;
+import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.repository.UserRepository;
 import com.rentmycar.rentmycar.service.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -65,6 +67,11 @@ public class UserService implements UserDetailsService {
 
     public void enableUser(String email) {
         userRepository.enableUser(email);
+    }
+
+    public String getAuthenticatedUserEmail() {
+        return SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal().toString();
     }
 
     public User updateUser(User user) {

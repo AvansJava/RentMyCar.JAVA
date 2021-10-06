@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.model;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,9 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "location")
@@ -22,14 +21,21 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String street;
+    @NotNull
     private String houseNumber;
+    @NotNull
     private String postalCode;
+    @NotNull
     private String city;
+    @NotNull
     private String country;
     @Column(precision=10, scale=6)
+    @NotNull
     private Float latitude;
     @Column(precision=10, scale=6)
+    @NotNull
     private Float longitude;
     @ManyToOne
     @JoinColumn(nullable = false, name = "user_id")
