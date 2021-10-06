@@ -1,6 +1,7 @@
 package com.rentmycar.rentmycar.model;
 
 import com.rentmycar.rentmycar.enums.UserRole;
+import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,11 +10,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "users")
@@ -25,7 +26,11 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
+    @Size(min = 2)
     private String firstName;
+    @NotNull
+    @Size(min = 2)
     private String lastName;
     private String street;
     private String houseNumber;
@@ -34,7 +39,11 @@ public class User implements UserDetails {
     private String country;
     private String phoneNumber;
     private String iban;
+    @NotNull
+    @Column(unique = true)
     private String email;
+    @NotNull
+    @Size(min = 6)
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
