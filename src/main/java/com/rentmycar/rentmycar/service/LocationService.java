@@ -25,22 +25,25 @@ public class LocationService {
     }
 
     public Location updateLocation(Long id, Location newLocation, User user) {
-        Location location = locationRepository.findById(id).stream().findFirst().orElseThrow(()
-                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Location could not be found."));
+        try {
+            Location location = locationRepository.getById(id);
 
-        if (user != location.getUser()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Location does not belong to user");
+            if (user != location.getUser()) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Location does not belong to user");
+            }
+            location.setStreet(newLocation.getStreet());
+            location.setHouseNumber(newLocation.getHouseNumber());
+            location.setPostalCode(newLocation.getPostalCode());
+            location.setCity(newLocation.getCity());
+            location.setCountry(newLocation.getCountry());
+            location.setLatitude(newLocation.getLatitude());
+            location.setLongitude(newLocation.getLongitude());
+
+            return locationRepository.save(location);
+
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Location could not be found.");
         }
-
-        location.setStreet(newLocation.getStreet());
-        location.setHouseNumber(newLocation.getHouseNumber());
-        location.setPostalCode(newLocation.getPostalCode());
-        location.setCity(newLocation.getCity());
-        location.setCountry(newLocation.getCountry());
-        location.setLatitude(newLocation.getLatitude());
-        location.setLongitude(newLocation.getLongitude());
-
-        return locationRepository.save(location);
     }
 
     public List<Location> getLocationsByUser(User user) {
@@ -48,13 +51,16 @@ public class LocationService {
     }
 
     public Location getLocationById(Long id, User user) {
-        Location location = locationRepository.findById(id).stream().findFirst().orElseThrow(()
-                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Location could not be found."));
+        try {
+            Location location = locationRepository.getById(id);
 
-        if (location.getUser() != user) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Location does not belong to user");
+            if (location.getUser() != user) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Location does not belong to user");
+            }
+            return location;
+
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Location could not be found.", e);
         }
-
-        return location;
     }
 }
