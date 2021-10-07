@@ -20,8 +20,8 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers() {
-        return userService.getUsers();
+    public User getUser() {
+        return userService.getAuthenticatedUser();
     }
 
     @PutMapping(path = "/{id}/")

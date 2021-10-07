@@ -27,10 +27,6 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
-    }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email).orElseThrow(() ->
@@ -79,6 +75,6 @@ public class UserService implements UserDetailsService {
     }
 
     public User updateUser(User user) {
-        return userRepository.save(user);
+        return this.userRepository.save(user);
     }
 }
