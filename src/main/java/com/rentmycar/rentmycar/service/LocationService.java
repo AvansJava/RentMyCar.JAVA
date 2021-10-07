@@ -1,26 +1,21 @@
 package com.rentmycar.rentmycar.service;
 
-import com.rentmycar.rentmycar.exception.LocationNotFoundException;
-import com.rentmycar.rentmycar.exception.LocationUserMismatchException;
-import com.rentmycar.rentmycar.exception.NoLocationsFoundException;
-import com.rentmycar.rentmycar.exception.UserNotFoundException;
 import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.repository.LocationRepository;
 import com.rentmycar.rentmycar.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LocationService {
     private final LocationRepository locationRepository;
-    private final UserRepository userRepository;
 
-    public LocationService(LocationRepository locationRepository, UserRepository userRepository) {
+    public LocationService(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
-        this.userRepository = userRepository;
     }
 
     public Location createLocation(Location location, User user) {
@@ -31,10 +26,10 @@ public class LocationService {
 
     public Location updateLocation(Long id, Location newLocation, User user) {
         Location location = locationRepository.findById(id).stream().findFirst().orElseThrow(()
-                -> new LocationNotFoundException(id));
+                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Location could not be found."));
 
         if (user != location.getUser()) {
-            throw new LocationUserMismatchException("Location does not belong to user");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Location does not belong to user");
         }
 
         location.setStreet(newLocation.getStreet());
@@ -54,10 +49,10 @@ public class LocationService {
 
     public Location getLocationById(Long id, User user) {
         Location location = locationRepository.findById(id).stream().findFirst().orElseThrow(()
-                -> new LocationNotFoundException(id));
+                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Location could not be found."));
 
         if (location.getUser() != user) {
-            throw new LocationNotFoundException(id);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Location does not belong to user");
         }
 
         return location;

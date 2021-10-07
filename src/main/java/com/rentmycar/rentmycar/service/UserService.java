@@ -1,36 +1,33 @@
 package com.rentmycar.rentmycar.service;
 
-import com.rentmycar.rentmycar.exception.UserNotFoundException;
 import com.rentmycar.rentmycar.model.ConfirmationToken;
-import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.repository.UserRepository;
-import com.rentmycar.rentmycar.service.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
 
-    private final static String USER_NOT_FOUND = "User with e-mail %s not found.";
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws ResponseStatusException {
         return userRepository.findByEmail(email).orElseThrow(() ->
-                new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "User with e-mail address " + email +
+                        " could not be found."));
     }
 
     public UUID registerUser(User user) {
@@ -38,7 +35,7 @@ public class UserService implements UserDetailsService {
 
         if (userExists) {
             // TODO: if user is same but unconfirmed, resend verification e-mail
-            throw new IllegalStateException("User already exists.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exists.");
         }
 
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
@@ -71,7 +68,8 @@ public class UserService implements UserDetailsService {
                 .getPrincipal().toString();
 
         return userRepository.findByEmail(email).stream().findFirst().orElseThrow(
-                () -> new UserNotFoundException(email));
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User with e-mail address " + email +
+                        " could not be found."));
     }
 
     public User updateUser(User user) {
