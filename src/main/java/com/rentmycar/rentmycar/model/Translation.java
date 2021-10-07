@@ -14,11 +14,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@IdClass(TranslationKey.class)
 public class Translation {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private UUID translationTag;
-    @Id
     private String language;
     @Lob
     private String content;
