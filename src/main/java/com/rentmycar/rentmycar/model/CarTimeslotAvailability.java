@@ -28,7 +28,7 @@ public class CarTimeslotAvailability {
     @JoinColumn(nullable = false, name = "timeslot_id")
     private Timeslot timeslot;
     @OneToOne
-    @JoinColumn(nullable = false, name = "product_id")
+    @JoinColumn(name = "product_id")
     private Product product;
     private LocalDateTime startAt;
     private LocalDateTime endAt;

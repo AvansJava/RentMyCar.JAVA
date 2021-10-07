@@ -1,4 +1,4 @@
-package com.rentmycar.rentmycar.datalayer;
+package com.rentmycar.rentmycar.dto;
 
 public class CarList {
     private String Brand;

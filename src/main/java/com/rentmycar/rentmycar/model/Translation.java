@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -20,6 +21,6 @@ public class Translation {
     private Long id;
     private UUID translationTag;
     private String language;
-    @Lob
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 }

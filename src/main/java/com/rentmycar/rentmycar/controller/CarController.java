@@ -1,7 +1,7 @@
 package com.rentmycar.rentmycar.controller;
 
 import com.rentmycar.rentmycar.model.Car;
-import com.rentmycar.rentmycar.datalayer.CarList;
+import com.rentmycar.rentmycar.dto.CarList;
 import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.service.CarService;
 

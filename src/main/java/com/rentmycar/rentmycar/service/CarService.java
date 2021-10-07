@@ -2,7 +2,7 @@ package com.rentmycar.rentmycar.service;
 
 import org.modelmapper.ModelMapper;
 
-import com.rentmycar.rentmycar.datalayer.CarList;
+import com.rentmycar.rentmycar.dto.CarList;
 import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.model.User;

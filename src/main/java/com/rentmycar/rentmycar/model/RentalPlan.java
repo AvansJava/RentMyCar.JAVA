@@ -29,10 +29,6 @@ public class RentalPlan {
     private LocalDateTime availableFrom;
     private LocalDateTime availableUntil;
     private BigDecimal price;
-    private int distance;
-    @OneToOne
-    @JoinColumn(nullable = false, name = "insurance_type_id")
-    private Insurance insuranceTypeId;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
