@@ -52,4 +52,18 @@ public class ApiExceptionHandler {
     public String handleNoLocationsFoundException(NoLocationsFoundException e) {
         return e.getMessage();
     }
+
+    @ExceptionHandler(CarNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNoLocationsFoundException(CarNotFoundException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(CarUserMismatchException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String handleLocationUserMismatchException(CarUserMismatchException e) {
+        return e.getMessage();
+    }
 }
