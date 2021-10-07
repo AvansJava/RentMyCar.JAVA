@@ -35,7 +35,7 @@ public class Car {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "location_id")
+    @JoinColumn(name = "location_id")
     private Location location;
     @CreationTimestamp
     private LocalDateTime createdAt;

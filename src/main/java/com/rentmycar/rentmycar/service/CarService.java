@@ -22,16 +22,14 @@ import java.util.stream.Collectors;
 public class CarService {
 
     private final CarRepository carRepository;
-    private final LocationRepository locationRepository;
-    private final UserRepository userRepository;
+    private final LocationService locationService;
     private ModelMapper modelMapper;
 
     @Autowired
-    public CarService(CarRepository carRepository, LocationRepository locationRepository, 
+    public CarService(CarRepository carRepository, LocationService locationService,
      UserRepository userRepository, ModelMapper modelMapper) {
         this.carRepository = carRepository;
-        this.locationRepository = locationRepository;
-        this.userRepository = userRepository;
+        this.locationService = locationService;
     }
 
     public List<CarList> getCarList() {
@@ -48,11 +46,12 @@ public class CarService {
         if (carOptional.isPresent()) {
             throw new CarAlreadyExistsException(licensePlateNumber);
         }
-
         car.setUser(user);
 
         Location location = car.getLocation();
-        locationRepository.save(location);
+        if (location != null) {
+            locationService.createLocation(location, user);
+        }
 
         return carRepository.save(car);
     }
