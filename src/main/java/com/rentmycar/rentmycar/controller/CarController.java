@@ -2,6 +2,7 @@ package com.rentmycar.rentmycar.controller;
 
 import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.datalayer.CarList;
+import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.service.CarService;
 
 import com.rentmycar.rentmycar.service.UserService;
@@ -32,8 +33,8 @@ public class CarController {
 
     @PostMapping
     public Car postCar(@RequestBody Car car) {
-        String email = userService.getAuthenticatedUserEmail();
+        User user = userService.getAuthenticatedUser();
 
-        return carService.createCar(car, email);
+        return carService.createCar(car, user);
     }
 }

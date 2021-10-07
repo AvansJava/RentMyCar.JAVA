@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.service;
 
+import com.rentmycar.rentmycar.exception.UserNotFoundException;
 import com.rentmycar.rentmycar.model.ConfirmationToken;
 import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.model.User;
@@ -69,9 +70,12 @@ public class UserService implements UserDetailsService {
         userRepository.enableUser(email);
     }
 
-    public String getAuthenticatedUserEmail() {
-        return SecurityContextHolder.getContext().getAuthentication()
+    public User getAuthenticatedUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal().toString();
+
+        return userRepository.findByEmail(email).stream().findFirst().orElseThrow(
+                () -> new UserNotFoundException(email));
     }
 
     public User updateUser(User user) {

@@ -41,7 +41,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public Car createCar(Car car, String email) {
+    public Car createCar(Car car, User user) {
         String licensePlateNumber = car.getLicensePlateNumber();
         Optional<Car> carOptional = carRepository.findCarByLicensePlateNumber(licensePlateNumber);
 
@@ -49,8 +49,6 @@ public class CarService {
             throw new CarAlreadyExistsException(licensePlateNumber);
         }
 
-        User user = userRepository.findByEmail(email).stream().findFirst().orElseThrow(
-                () -> new UserNotFoundException(email));
         car.setUser(user);
 
         Location location = car.getLocation();

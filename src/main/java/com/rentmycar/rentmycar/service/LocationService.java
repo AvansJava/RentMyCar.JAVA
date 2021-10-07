@@ -23,17 +23,13 @@ public class LocationService {
         this.userRepository = userRepository;
     }
 
-    public Location createLocation(Location location, String email) {
-        User user = userRepository.findByEmail(email).stream().findFirst().orElseThrow(()
-                -> new UserNotFoundException(email));
+    public Location createLocation(Location location, User user) {
         location.setUser(user);
 
         return locationRepository.save(location);
     }
 
-    public Location updateLocation(Long id, Location newLocation, String email) {
-        User user = userRepository.findByEmail(email).stream().findFirst().orElseThrow(()
-                -> new UserNotFoundException(email));
+    public Location updateLocation(Long id, Location newLocation, User user) {
         Location location = locationRepository.findById(id).stream().findFirst().orElseThrow(()
                 -> new LocationNotFoundException(id));
 
@@ -52,10 +48,18 @@ public class LocationService {
         return locationRepository.save(location);
     }
 
-    public List<Location> getLocationsByUser(String email) {
-        User user = userRepository.findByEmail(email).stream().findFirst().orElseThrow(
-                () -> new UserNotFoundException(email));
-
+    public List<Location> getLocationsByUser(User user) {
         return locationRepository.findAllByUser(user);
+    }
+
+    public Location getLocationById(Long id, User user) {
+        Location location = locationRepository.findById(id).stream().findFirst().orElseThrow(()
+                -> new LocationNotFoundException(id));
+
+        if (location.getUser() != user) {
+            throw new LocationNotFoundException(id);
+        }
+
+        return location;
     }
 }
