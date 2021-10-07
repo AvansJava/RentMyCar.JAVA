@@ -1,7 +1,6 @@
 package com.rentmycar.rentmycar.service;
 
-import com.rentmycar.rentmycar.exception.CarAlreadyExistsException;
-import com.rentmycar.rentmycar.exception.UserNotFoundException;
+import com.rentmycar.rentmycar.exception.*;
 import org.modelmapper.ModelMapper;
 
 import com.rentmycar.rentmycar.datalayer.CarList;
@@ -26,8 +25,7 @@ public class CarService {
     private ModelMapper modelMapper;
 
     @Autowired
-    public CarService(CarRepository carRepository, LocationService locationService,
-     UserRepository userRepository, ModelMapper modelMapper) {
+    public CarService(CarRepository carRepository, LocationService locationService, ModelMapper modelMapper) {
         this.carRepository = carRepository;
         this.locationService = locationService;
     }
@@ -54,5 +52,38 @@ public class CarService {
         }
 
         return carRepository.save(car);
+    }
+
+    public Car updateCar(Long id, Car newCar, User user) {
+        Car car = carRepository.findById(id).stream().findFirst().orElseThrow(()
+                -> new CarNotFoundException("Car could not be found."));
+
+        if (user != car.getUser()) {
+            throw new CarUserMismatchException("Car does not belong to user");
+        }
+
+        car.setBrand(newCar.getBrand());
+        car.setBrandType(newCar.getBrandType());
+        car.setModel(newCar.getModel());
+        car.setLicensePlateNumber(newCar.getLicensePlateNumber());
+        car.setConsumption(newCar.getConsumption());
+        car.setCarType(newCar.getCarType());
+
+        return carRepository.save(car);
+    }
+
+    public List<Car> getCarsByUser(User user) {
+        return carRepository.findAllByUser(user);
+    }
+
+    public Car getCarByUser(Long id, User user) {
+        Car car = carRepository.findById(id).stream().findFirst().orElseThrow(()
+                -> new CarNotFoundException("Car could not be found."));
+
+        if (car.getUser() != user) {
+            throw new CarUserMismatchException("Car does not belong to current user.");
+        }
+
+        return car;
     }
 }

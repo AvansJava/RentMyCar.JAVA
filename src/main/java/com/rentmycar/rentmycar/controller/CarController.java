@@ -37,4 +37,22 @@ public class CarController {
 
         return carService.createCar(car, user);
     }
+
+    @PutMapping(path = "{id}/")
+    public Car putCar(@PathVariable("id") Long id, @RequestBody Car newCar) {
+        User user = userService.getAuthenticatedUser();
+        return carService.updateCar(id, newCar, user);
+    }
+
+    @GetMapping
+    public List<Car> getCarsByUser() {
+        User user = userService.getAuthenticatedUser();
+        return carService.getCarsByUser(user);
+    }
+
+    @GetMapping(path = "{id}/")
+    public Car getCarByUser(@PathVariable("id") Long id) {
+        User user = userService.getAuthenticatedUser();
+        return carService.getCarByUser(id,user);
+    }
 }

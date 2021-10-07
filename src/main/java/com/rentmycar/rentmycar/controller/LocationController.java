@@ -23,15 +23,14 @@ public class LocationController {
         this.userService = userService;
     }
 
-    //TODO fix validation, @valid doesn't seem to work now
     @PostMapping
-    public Location postLocation(@Valid @RequestBody Location location) {
+    public Location postLocation(@RequestBody Location location) {
         User user = userService.getAuthenticatedUser();
         return locationService.createLocation(location, user);
     }
 
     @PutMapping(path = "{id}/")
-    public Location putLocation(@Valid @PathVariable("id") Long id, @RequestBody Location newLocation) {
+    public Location putLocation(@PathVariable("id") Long id, @RequestBody Location newLocation) {
         User user = userService.getAuthenticatedUser();
         return locationService.updateLocation(id, newLocation, user);
     }
