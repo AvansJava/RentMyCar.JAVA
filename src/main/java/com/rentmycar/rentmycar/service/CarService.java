@@ -50,26 +50,28 @@ public class CarService {
         if (location != null) {
             locationService.createLocation(location, user);
         }
-
         return carRepository.save(car);
     }
 
     public Car updateCar(Long id, Car newCar, User user) {
-        Car car = carRepository.findById(id).stream().findFirst().orElseThrow(()
-                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car could not be found."));
+        try {
+            Car car = carRepository.getById(id);
 
-        if (user != car.getUser()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user");
+            if (user != car.getUser()) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user");
+            }
+            car.setBrand(newCar.getBrand());
+            car.setBrandType(newCar.getBrandType());
+            car.setModel(newCar.getModel());
+            car.setLicensePlateNumber(newCar.getLicensePlateNumber());
+            car.setConsumption(newCar.getConsumption());
+            car.setCarType(newCar.getCarType());
+
+            return carRepository.save(car);
+
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car could not be found.", e);
         }
-
-        car.setBrand(newCar.getBrand());
-        car.setBrandType(newCar.getBrandType());
-        car.setModel(newCar.getModel());
-        car.setLicensePlateNumber(newCar.getLicensePlateNumber());
-        car.setConsumption(newCar.getConsumption());
-        car.setCarType(newCar.getCarType());
-
-        return carRepository.save(car);
     }
 
     public List<Car> getCarsByUser(User user) {
@@ -77,13 +79,16 @@ public class CarService {
     }
 
     public Car getCarByUser(Long id, User user) {
-        Car car = carRepository.findById(id).stream().findFirst().orElseThrow(()
-                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car could not be found."));
+        try {
+            Car car = carRepository.getById(id);
 
-        if (car.getUser() != user) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
+            if (car.getUser() != user) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
+            }
+            return car;
+
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car could not be found.", e);
         }
-
-        return car;
     }
 }
