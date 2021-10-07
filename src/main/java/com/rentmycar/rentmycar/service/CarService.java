@@ -1,6 +1,5 @@
 package com.rentmycar.rentmycar.service;
 
-import com.rentmycar.rentmycar.exception.*;
 import org.modelmapper.ModelMapper;
 
 import com.rentmycar.rentmycar.datalayer.CarList;
@@ -8,10 +7,10 @@ import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.repository.CarRepository;
-import com.rentmycar.rentmycar.repository.LocationRepository;
-import com.rentmycar.rentmycar.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +41,8 @@ public class CarService {
         Optional<Car> carOptional = carRepository.findCarByLicensePlateNumber(licensePlateNumber);
 
         if (carOptional.isPresent()) {
-            throw new CarAlreadyExistsException(licensePlateNumber);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "A car with license plate number " + licensePlateNumber + "already exists.");
         }
         car.setUser(user);
 
@@ -56,10 +56,10 @@ public class CarService {
 
     public Car updateCar(Long id, Car newCar, User user) {
         Car car = carRepository.findById(id).stream().findFirst().orElseThrow(()
-                -> new CarNotFoundException("Car could not be found."));
+                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car could not be found."));
 
         if (user != car.getUser()) {
-            throw new CarUserMismatchException("Car does not belong to user");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user");
         }
 
         car.setBrand(newCar.getBrand());
@@ -78,10 +78,10 @@ public class CarService {
 
     public Car getCarByUser(Long id, User user) {
         Car car = carRepository.findById(id).stream().findFirst().orElseThrow(()
-                -> new CarNotFoundException("Car could not be found."));
+                -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car could not be found."));
 
         if (car.getUser() != user) {
-            throw new CarUserMismatchException("Car does not belong to current user.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
         }
 
         return car;

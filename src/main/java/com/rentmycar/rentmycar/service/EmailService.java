@@ -4,10 +4,12 @@ import com.rentmycar.rentmycar.util.EmailSender;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -32,7 +34,7 @@ public class EmailService implements EmailSender {
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             LOGGER.error("E-mail could not be send", e);
-            throw new IllegalStateException("Failed to send e-mail.");
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Failed to send e-mail.");
         }
     }
 }
