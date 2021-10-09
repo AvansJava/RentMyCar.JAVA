@@ -64,10 +64,10 @@ VALUES ('Honda', 'H-RV', 'EX-L', '465-HK-3', 5.7, CURRENT_TIMESTAMP, 'ICE', 1, 1
        ('Peugeot', '208', 'e', '3-UP-869', 16.4, CURRENT_TIMESTAMP, 'BEV', 4, 4);
 
 INSERT INTO rental_plan (car_id, user_id, available_from, available_until, price, created_at)
-VALUES (1, 1, '2021-11-01 00:00:00', '2021-11-03 00:00:00', 80.00, CURRENT_TIMESTAMP),
-       (2, 2, '2021-12-01 00:00:00', '2021-12-03 00:00:00', 60.00, CURRENT_TIMESTAMP),
-       (3, 3, '2021-11-01 00:00:00', '2021-11-03 00:00:00', 90.00, CURRENT_TIMESTAMP),
-       (4, 4, '2021-11-01 00:00:00', '2021-12-01 00:00:00', 60.00, CURRENT_TIMESTAMP);
+VALUES (1, 1, '2021-11-01', '2021-11-03', 80.00, CURRENT_TIMESTAMP),
+       (2, 2, '2021-12-01', '2021-12-03', 60.00, CURRENT_TIMESTAMP),
+       (3, 3, '2021-11-01', '2021-11-03', 90.00, CURRENT_TIMESTAMP),
+       (4, 4, '2021-11-01', '2021-12-01', 60.00, CURRENT_TIMESTAMP);
 
 INSERT INTO car_timeslot_availability (car_id, timeslot_id, start_at, end_at, status, created_at)
 VALUES (1, 1, '2021-11-01 07:00:00', '2021-11-01 11:30:00', 'OPEN', CURRENT_TIMESTAMP),
