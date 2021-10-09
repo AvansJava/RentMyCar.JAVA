@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -14,12 +15,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@IdClass(TranslationKey.class)
 public class Translation {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private UUID translationTag;
-    @Id
     private String language;
-    @Lob
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 }

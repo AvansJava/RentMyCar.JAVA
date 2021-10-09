@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "timeslot")
@@ -18,6 +18,6 @@ public class Timeslot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Time startAt;
-    private Time endAt;
+    private LocalTime startAt;
+    private LocalTime endAt;
 }

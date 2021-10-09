@@ -29,6 +29,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(nullable = false, name = "rental_plan_id")
     private RentalPlan rentalPlan;
+    @OneToOne
+    @JoinColumn(nullable = false, name = "insurance_type_id")
+    private Insurance insuranceTypeId;
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
     @CreationTimestamp

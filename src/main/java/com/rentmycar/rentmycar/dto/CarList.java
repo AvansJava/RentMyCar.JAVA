@@ -1,4 +1,4 @@
-package com.rentmycar.rentmycar.datalayer;
+package com.rentmycar.rentmycar.dto;
 
 import java.util.HashMap;
 import java.util.Map;

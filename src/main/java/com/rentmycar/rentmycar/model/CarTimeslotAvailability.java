@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.http.ResponseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ public class CarTimeslotAvailability {
     @JoinColumn(nullable = false, name = "timeslot_id")
     private Timeslot timeslot;
     @OneToOne
-    @JoinColumn(nullable = false, name = "product_id")
+    @JoinColumn(name = "product_id")
     private Product product;
     private LocalDateTime startAt;
     private LocalDateTime endAt;

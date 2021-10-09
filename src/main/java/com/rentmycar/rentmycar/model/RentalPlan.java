@@ -1,7 +1,5 @@
 package com.rentmycar.rentmycar.model;
 
-import com.rentmycar.rentmycar.model.Car;
-import com.rentmycar.rentmycar.model.Insurance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,13 +25,12 @@ public class RentalPlan {
     @ManyToOne
     @JoinColumn(nullable = false, name = "car_id")
     private Car car;
-    private LocalDateTime availableFrom;
-    private LocalDateTime availableUntil;
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
+    private LocalDate availableFrom;
+    private LocalDate availableUntil;
     private BigDecimal price;
-    private int distance;
-    @OneToOne
-    @JoinColumn(nullable = false, name = "insurance_type_id")
-    private Insurance insuranceTypeId;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

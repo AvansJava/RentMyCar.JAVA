@@ -1,26 +1,24 @@
 package com.rentmycar.rentmycar.service;
 
-import com.rentmycar.rentmycar.exception.LocationNotFoundException;
-import com.rentmycar.rentmycar.exception.LocationUserMismatchException;
-import com.rentmycar.rentmycar.exception.NoLocationsFoundException;
-import com.rentmycar.rentmycar.exception.UserNotFoundException;
 import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.model.User;
+import com.rentmycar.rentmycar.repository.CarRepository;
 import com.rentmycar.rentmycar.repository.LocationRepository;
-import com.rentmycar.rentmycar.repository.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LocationService {
     private final LocationRepository locationRepository;
-    private final UserRepository userRepository;
+    private final CarRepository carRepository;
 
-    public LocationService(LocationRepository locationRepository, UserRepository userRepository) {
+    public LocationService(LocationRepository locationRepository, CarRepository carRepository) {
         this.locationRepository = locationRepository;
-        this.userRepository = userRepository;
+        this.carRepository = carRepository;
     }
 
     public Location createLocation(Location location, User user) {
@@ -30,13 +28,11 @@ public class LocationService {
     }
 
     public Location updateLocation(Long id, Location newLocation, User user) {
-        Location location = locationRepository.findById(id).stream().findFirst().orElseThrow(()
-                -> new LocationNotFoundException(id));
+        Location location = locationRepository.getById(id);
 
         if (user != location.getUser()) {
-            throw new LocationUserMismatchException("Location does not belong to user");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Location does not belong to user");
         }
-
         location.setStreet(newLocation.getStreet());
         location.setHouseNumber(newLocation.getHouseNumber());
         location.setPostalCode(newLocation.getPostalCode());
@@ -53,13 +49,27 @@ public class LocationService {
     }
 
     public Location getLocationById(Long id, User user) {
-        Location location = locationRepository.findById(id).stream().findFirst().orElseThrow(()
-                -> new LocationNotFoundException(id));
+        Location location = locationRepository.getById(id);
 
         if (location.getUser() != user) {
-            throw new LocationNotFoundException(id);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Location does not belong to user");
+        }
+        return location;
+    }
+
+    public ResponseEntity<String> deleteLocationById(Long id, User user) {
+        Location location = locationRepository.getById(id);
+
+        if (location.getUser() != user) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Location does not belong to user");
         }
 
-        return location;
+        if (carRepository.findCarsByLocation(location).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Location cannot be deleted because it still has cars assigned to it.");
+        }
+        locationRepository.delete(location);
+
+        return new ResponseEntity<>("Location successfully deleted.", HttpStatus.OK);
     }
 }
