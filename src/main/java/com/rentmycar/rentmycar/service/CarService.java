@@ -9,6 +9,7 @@ import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -36,7 +37,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public Car createCar(Car car, User user) {
+    public ResponseEntity<Car> createCar(Car car, User user) {
         String licensePlateNumber = car.getLicensePlateNumber();
         Optional<Car> carOptional = carRepository.findCarByLicensePlateNumber(licensePlateNumber);
 
@@ -50,28 +51,24 @@ public class CarService {
         if (location != null) {
             locationService.createLocation(location, user);
         }
-        return carRepository.save(car);
+        Car createdCar = carRepository.save(car);
+        return new ResponseEntity<>(createdCar, HttpStatus.CREATED);
     }
 
     public Car updateCar(Long id, Car newCar, User user) {
-        try {
-            Car car = carRepository.getById(id);
+        Car car = carRepository.getById(id);
 
-            if (user != car.getUser()) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user");
-            }
-            car.setBrand(newCar.getBrand());
-            car.setBrandType(newCar.getBrandType());
-            car.setModel(newCar.getModel());
-            car.setLicensePlateNumber(newCar.getLicensePlateNumber());
-            car.setConsumption(newCar.getConsumption());
-            car.setCarType(newCar.getCarType());
-
-            return carRepository.save(car);
-
-        } catch (ResponseStatusException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car could not be found.", e);
+        if (user != car.getUser()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user");
         }
+        car.setBrand(newCar.getBrand());
+        car.setBrandType(newCar.getBrandType());
+        car.setModel(newCar.getModel());
+        car.setLicensePlateNumber(newCar.getLicensePlateNumber());
+        car.setConsumption(newCar.getConsumption());
+        car.setCarType(newCar.getCarType());
+
+        return carRepository.save(car);
     }
 
     public List<Car> getCarsByUser(User user) {
@@ -79,16 +76,23 @@ public class CarService {
     }
 
     public Car getCarByUser(Long id, User user) {
-        try {
-            Car car = carRepository.getById(id);
+        Car car = carRepository.getById(id);
 
-            if (car.getUser() != user) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
-            }
-            return car;
-
-        } catch (ResponseStatusException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car could not be found.", e);
+        if (car.getUser() != user) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
         }
+
+        return car;
+    }
+
+    public ResponseEntity<String> deleteCar(Long id, User user) {
+        Car car = carRepository.getById(id);
+
+        if (car.getUser() != user) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
+        }
+        carRepository.delete(car);
+
+        return new ResponseEntity<>("Car successfully deleted.", HttpStatus.OK);
     }
 }
