@@ -5,6 +5,7 @@ import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.service.LocationService;
 import com.rentmycar.rentmycar.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,5 +46,11 @@ public class LocationController {
     public Location getLocation(@PathVariable("id") Long id) {
         User user = userService.getAuthenticatedUser();
         return locationService.getLocationById(id, user);
+    }
+
+    @DeleteMapping(path = "{id}/")
+    public ResponseEntity<String> deleteLocation(@PathVariable("id") Long id) {
+        User user = userService.getAuthenticatedUser();
+        return locationService.deleteLocationById(id, user);
     }
 }

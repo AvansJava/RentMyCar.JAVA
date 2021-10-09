@@ -26,6 +26,9 @@ public class RentalPlan {
     @ManyToOne
     @JoinColumn(nullable = false, name = "car_id")
     private Car car;
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
     private LocalDateTime availableFrom;
     private LocalDateTime availableUntil;
     private BigDecimal price;
