@@ -1,8 +1,8 @@
 package com.rentmycar.rentmycar.service;
 
+import com.rentmycar.rentmycar.dto.CarDto;
 import org.modelmapper.ModelMapper;
 
-import com.rentmycar.rentmycar.dto.CarList;
 import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.model.User;
@@ -28,12 +28,13 @@ public class CarService {
     public CarService(CarRepository carRepository, LocationService locationService, ModelMapper modelMapper) {
         this.carRepository = carRepository;
         this.locationService = locationService;
+        this.modelMapper = modelMapper;
     }
 
-    public List<CarList> getCarList() {
-        return ((List<Car>) carRepository.findAll())
+    public List<CarDto> getCarList() {
+        return carRepository.findAll()
                 .stream()
-                .map(obj -> modelMapper.map(obj, CarList.class))
+                .map(obj -> modelMapper.map(obj, CarDto.class))
                 .collect(Collectors.toList());
     }
 
