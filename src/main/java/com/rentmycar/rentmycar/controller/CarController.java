@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.controller;
 
+import com.rentmycar.rentmycar.dto.CarDto;
 import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.dto.CarList;
 import com.rentmycar.rentmycar.model.User;
@@ -33,26 +34,26 @@ public class CarController {
     }
 
     @PostMapping
-    public ResponseEntity<Car> postCar(@RequestBody Car car) {
+    public ResponseEntity<CarDto> postCar(@RequestBody Car car) {
         User user = userService.getAuthenticatedUser();
 
         return carService.createCar(car, user);
     }
 
     @PutMapping(path = "{id}/")
-    public Car putCar(@PathVariable("id") Long id, @RequestBody Car newCar) {
+    public CarDto putCar(@PathVariable("id") Long id, @RequestBody Car newCar) {
         User user = userService.getAuthenticatedUser();
         return carService.updateCar(id, newCar, user);
     }
 
     @GetMapping
-    public List<Car> getCarsByUser() {
+    public List<CarDto> getCarsByUser() {
         User user = userService.getAuthenticatedUser();
         return carService.getCarsByUser(user);
     }
 
     @GetMapping(path = "{id}/")
-    public Car getCarByUser(@PathVariable("id") Long id) {
+    public CarDto getCarByUser(@PathVariable("id") Long id) {
         User user = userService.getAuthenticatedUser();
         return carService.getCarByUser(id,user);
     }

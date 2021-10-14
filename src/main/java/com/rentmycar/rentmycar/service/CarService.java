@@ -1,5 +1,8 @@
 package com.rentmycar.rentmycar.service;
 
+import com.rentmycar.rentmycar.dto.CarDto;
+import com.rentmycar.rentmycar.model.RentalPlan;
+import com.rentmycar.rentmycar.repository.RentalPlanRepository;
 import org.modelmapper.ModelMapper;
 
 import com.rentmycar.rentmycar.dto.CarList;
@@ -22,12 +25,15 @@ public class CarService {
 
     private final CarRepository carRepository;
     private final LocationService locationService;
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
+    private final RentalPlanRepository rentalPlanRepository;
 
     @Autowired
-    public CarService(CarRepository carRepository, LocationService locationService, ModelMapper modelMapper) {
+    public CarService(CarRepository carRepository, LocationService locationService, ModelMapper modelMapper, RentalPlanRepository rentalPlanRepository) {
         this.carRepository = carRepository;
         this.locationService = locationService;
+        this.modelMapper = modelMapper;
+        this.rentalPlanRepository = rentalPlanRepository;
     }
 
     public List<CarList> getCarList() {
@@ -37,7 +43,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity<Car> createCar(Car car, User user) {
+    public ResponseEntity<CarDto> createCar(Car car, User user) {
         String licensePlateNumber = car.getLicensePlateNumber();
         Optional<Car> carOptional = carRepository.findCarByLicensePlateNumber(licensePlateNumber);
 
@@ -52,10 +58,10 @@ public class CarService {
             locationService.createLocation(location, user);
         }
         Car createdCar = carRepository.save(car);
-        return new ResponseEntity<>(createdCar, HttpStatus.CREATED);
+        return new ResponseEntity<>(modelMapper.map(createdCar, CarDto.class), HttpStatus.CREATED);
     }
 
-    public Car updateCar(Long id, Car newCar, User user) {
+    public CarDto updateCar(Long id, Car newCar, User user) {
         Car car = carRepository.getById(id);
 
         if (user != car.getUser()) {
@@ -68,21 +74,24 @@ public class CarService {
         car.setConsumption(newCar.getConsumption());
         car.setCarType(newCar.getCarType());
 
-        return carRepository.save(car);
+        return modelMapper.map(carRepository.save(car), CarDto.class);
     }
 
-    public List<Car> getCarsByUser(User user) {
-        return carRepository.findAllByUser(user);
+    public List<CarDto> getCarsByUser(User user) {
+        return carRepository.findAllByUser(user)
+                .stream()
+                .map(obj -> modelMapper.map(obj, CarDto.class))
+                .collect(Collectors.toList());
     }
 
-    public Car getCarByUser(Long id, User user) {
+    public CarDto getCarByUser(Long id, User user) {
         Car car = carRepository.getById(id);
 
         if (car.getUser() != user) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
         }
 
-        return car;
+        return modelMapper.map(car, CarDto.class);
     }
 
     public ResponseEntity<String> deleteCar(Long id, User user) {
@@ -91,8 +100,13 @@ public class CarService {
         if (car.getUser() != user) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
         }
-        carRepository.delete(car);
 
+        Optional<RentalPlan> rentalPlan = rentalPlanRepository.findAllByCar(car);
+        if (rentalPlan.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car can't be deleted because it has active rental plans.");
+        }
+
+        carRepository.delete(car);
         return new ResponseEntity<>("Car successfully deleted.", HttpStatus.OK);
     }
 }
