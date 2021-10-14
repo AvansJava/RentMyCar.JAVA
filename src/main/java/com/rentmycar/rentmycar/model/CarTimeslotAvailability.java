@@ -31,6 +31,9 @@ public class CarTimeslotAvailability {
     @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false, name = "rental_plan_id")
+    private RentalPlan rentalPlan;
     private LocalDateTime startAt;
     private LocalDateTime endAt;
     @Enumerated(EnumType.STRING)

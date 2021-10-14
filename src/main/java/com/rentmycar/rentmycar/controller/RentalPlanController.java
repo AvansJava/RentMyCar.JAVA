@@ -1,7 +1,6 @@
 package com.rentmycar.rentmycar.controller;
 
 import com.rentmycar.rentmycar.dto.RentalPlanDto;
-import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.model.RentalPlan;
 import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.service.RentalPlanService;
@@ -40,5 +39,11 @@ public class RentalPlanController {
     public ResponseEntity<RentalPlanDto> postRentalPlan(@RequestBody RentalPlan rentalPlan) {
         User user = userService.getAuthenticatedUser();
         return rentalPlanService.createRentalPlan(rentalPlan, user);
+    }
+
+    @DeleteMapping(path = "{id}/")
+    public ResponseEntity<String> deleteRentalPlan(@PathVariable("id") Long id) {
+        User user = userService.getAuthenticatedUser();
+        return rentalPlanService.deleteRentalPlan(id, user);
     }
 }
