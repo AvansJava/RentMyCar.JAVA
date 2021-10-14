@@ -1,13 +1,14 @@
 package com.rentmycar.rentmycar.service;
 
+import com.rentmycar.rentmycar.dto.AvailabilityStatusDto;
+import com.rentmycar.rentmycar.dto.CarTimeslotAvailabilityDto;
 import com.rentmycar.rentmycar.enums.TimeSlotAvailabilityStatus;
 import com.rentmycar.rentmycar.model.*;
 import com.rentmycar.rentmycar.repository.CarTimeslotAvailabilityRepository;
 import com.rentmycar.rentmycar.repository.TimeslotRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -20,12 +21,14 @@ public class CarTimeslotAvailabilityService {
     private final CarTimeslotAvailabilityRepository carTimeslotAvailabilityRepository;
     private final TimeslotRepository timeslotRepository;
     private final UserService userService;
+    private final ModelMapper modelMapper;
 
     public CarTimeslotAvailabilityService(CarTimeslotAvailabilityRepository carTimeslotAvailabilityRepository,
-                                          TimeslotRepository timeslotRepository, UserService userService) {
+                                          TimeslotRepository timeslotRepository, UserService userService, ModelMapper modelMapper) {
         this.carTimeslotAvailabilityRepository = carTimeslotAvailabilityRepository;
         this.timeslotRepository = timeslotRepository;
         this.userService = userService;
+        this.modelMapper = modelMapper;
     }
 
     public void postAvailability(LocalDate day, Car car, RentalPlan rentalPlan) {
@@ -63,4 +66,17 @@ public class CarTimeslotAvailabilityService {
     public void deleteTimeslotsRentalPlan(RentalPlan rentalPlan) {
         carTimeslotAvailabilityRepository.deleteAllByRentalPlan(rentalPlan);
     }
+
+    public CarTimeslotAvailabilityDto updateTimeslotStatus(Long id, AvailabilityStatusDto availabilityStatusDto, User user) {
+        CarTimeslotAvailability timeslot = carTimeslotAvailabilityRepository.getById(id);
+        User timeslotUser = timeslot.getRentalPlan().getUser();
+
+        if (timeslotUser != user) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User has no permission to edit this timeslot.");
+        }
+
+        timeslot.setStatus(availabilityStatusDto.getStatus());
+        return modelMapper.map(carTimeslotAvailabilityRepository.save(timeslot), CarTimeslotAvailabilityDto.class);
+    }
+
 }

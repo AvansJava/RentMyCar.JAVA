@@ -1,4 +1,4 @@
-package com.rentmycar.rentmycar.model.request;
+package com.rentmycar.rentmycar.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class UserRequest {
+public class UserDto {
     private final String firstName;
     private final String lastName;
     private final String street;

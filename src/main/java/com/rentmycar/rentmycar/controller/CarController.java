@@ -60,6 +60,6 @@ public class CarController {
     @DeleteMapping(path = "{id}/")
     public ResponseEntity<String> deleteCar(@PathVariable("id") Long id) {
         User user = userService.getAuthenticatedUser();
-        return carService.deleteCar(id,user);
+        return carService.deleteCar(id, user);
     }
 }

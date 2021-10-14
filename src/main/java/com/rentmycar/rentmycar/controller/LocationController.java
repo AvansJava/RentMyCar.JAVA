@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.controller;
 
+import com.rentmycar.rentmycar.dto.LocationDto;
 import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.service.LocationService;
@@ -25,25 +26,25 @@ public class LocationController {
     }
 
     @PostMapping
-    public Location postLocation(@RequestBody Location location) {
+    public LocationDto postLocation(@RequestBody Location location) {
         User user = userService.getAuthenticatedUser();
         return locationService.createLocation(location, user);
     }
 
     @PutMapping(path = "{id}/")
-    public Location putLocation(@PathVariable("id") Long id, @RequestBody Location newLocation) {
+    public LocationDto putLocation(@PathVariable("id") Long id, @RequestBody Location newLocation) {
         User user = userService.getAuthenticatedUser();
         return locationService.updateLocation(id, newLocation, user);
     }
 
     @GetMapping
-    public List<Location> getLocationsByUser() {
+    public List<LocationDto> getLocationsByUser() {
         User user = userService.getAuthenticatedUser();
         return locationService.getLocationsByUser(user);
     }
 
     @GetMapping(path = "{id}/")
-    public Location getLocation(@PathVariable("id") Long id) {
+    public LocationDto getLocation(@PathVariable("id") Long id) {
         User user = userService.getAuthenticatedUser();
         return locationService.getLocationById(id, user);
     }

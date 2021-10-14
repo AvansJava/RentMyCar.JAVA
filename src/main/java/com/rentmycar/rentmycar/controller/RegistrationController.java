@@ -1,6 +1,6 @@
 package com.rentmycar.rentmycar.controller;
 
-import com.rentmycar.rentmycar.model.request.RegistrationRequest;
+import com.rentmycar.rentmycar.dto.RegistrationDto;
 import com.rentmycar.rentmycar.service.RegistrationService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ public class RegistrationController {
     private RegistrationService registrationService;
 
     @PostMapping
-    public UUID register(@RequestBody RegistrationRequest request) {
+    public UUID register(@RequestBody RegistrationDto request) {
         return registrationService.register(request);
     }
 

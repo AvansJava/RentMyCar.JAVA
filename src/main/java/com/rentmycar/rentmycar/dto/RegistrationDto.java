@@ -1,4 +1,4 @@
-package com.rentmycar.rentmycar.model.request;
+package com.rentmycar.rentmycar.dto;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class RegistrationRequest {
+public class RegistrationDto {
     @NotNull
     private final String firstName;
     @NotNull

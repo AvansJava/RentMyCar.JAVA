@@ -1,6 +1,6 @@
 package com.rentmycar.rentmycar.service;
 
-import com.rentmycar.rentmycar.model.request.RegistrationRequest;
+import com.rentmycar.rentmycar.dto.RegistrationDto;
 import com.rentmycar.rentmycar.util.EmailSender;
 import com.rentmycar.rentmycar.model.ConfirmationToken;
 import com.rentmycar.rentmycar.model.User;
@@ -24,7 +24,7 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
-    public UUID register(RegistrationRequest request) {
+    public UUID register(RegistrationDto request) {
         String email = request.getEmail();
         boolean isValidEmail = emailValidator.test(email);
 
