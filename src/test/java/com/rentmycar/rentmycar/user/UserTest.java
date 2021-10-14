@@ -1,6 +1,6 @@
 package com.rentmycar.rentmycar.user;
 
-import com.rentmycar.rentmycar.repository.UserRepository;
+import com.rentmycar.rentmycar.common.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
