@@ -3,15 +3,16 @@ package com.rentmycar.rentmycar.controller;
 import com.rentmycar.rentmycar.dto.CarDto;
 import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.dto.CarList;
+import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.service.CarService;
 
 import com.rentmycar.rentmycar.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path="api/v1.0/cars/")
@@ -27,18 +28,17 @@ public class CarController {
     }
 
     @GetMapping(path="list/")
-    public List<CarList> getCars() {
-        List <CarList> cars = carService.getCarList();
-
-        return cars;
+    public List<CarDto> getCarsList() {
+        User user = userService.getAuthenticatedUser();
+        return carService.getCarsList();
     }
 
     @PostMapping
     public ResponseEntity<CarDto> postCar(@RequestBody Car car) {
         User user = userService.getAuthenticatedUser();
 
-        return carService.createCar(car, user);
-    }
+       return carService.createCar(car, user);
+   }
 
     @PutMapping(path = "{id}/")
     public CarDto putCar(@PathVariable("id") Long id, @RequestBody Car newCar) {
