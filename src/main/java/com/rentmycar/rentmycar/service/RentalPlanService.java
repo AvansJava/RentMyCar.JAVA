@@ -52,22 +52,28 @@ public class RentalPlanService {
     }
 
     public ResponseEntity<RentalPlanDto> createRentalPlan(RentalPlan rentalPlan, User user) {
-        Car car = rentalPlan.getCar();
+        Optional<Car> carOptional = carRepository.findById(rentalPlan.getCar().getId());
+
+        if (carOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car does not exist.");
+        }
+
+        Car car = carOptional.get();
         Optional<RentalPlan> rentalPlanOptional = rentalPlanRepository.findAllByCar(car);
 
         if (rentalPlanOptional.isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This car already has a rental plan.");
         }
 
-//        if (car.getUser() != user) {
-//            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-//                    "User has no permissions to create a rental plan for this car.");
-//        }
+        if (car.getUser() != user) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "User has no permissions to create a rental plan for this car.");
+        }
 
         List<LocalDate> availableDates = getRentalPlanAvailableDates(rentalPlan.getAvailableFrom(), rentalPlan.getAvailableUntil());
 
         for (LocalDate day: availableDates) {
-            carTimeslotAvailabilityService.postAvailability(rentalPlan, day);
+            carTimeslotAvailabilityService.postAvailability(day, car);
         }
         rentalPlan.setUser(user);
         rentalPlanRepository.save(rentalPlan);

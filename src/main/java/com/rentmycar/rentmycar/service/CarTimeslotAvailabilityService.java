@@ -28,15 +28,14 @@ public class CarTimeslotAvailabilityService {
     }
 
 
-    public void postAvailability(RentalPlan rentalPlan, LocalDate day) {
-        Car car = rentalPlan.getCar();
+    public void postAvailability(LocalDate day, Car car) {
         User user = userService.getAuthenticatedUser();
         List<Timeslot> timeslots = timeslotRepository.findAll();
 
-//        if (car.getUser() != user) {
-//            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-//                    "User has no permissions to create timeslots for this car.");
-//        }
+        if (car.getUser() != user) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "User has no permissions to create timeslots for this car.");
+        }
 
         for (Timeslot timeslot: timeslots) {
             LocalDateTime startAt = LocalDateTime.of(day, timeslot.getStartAt());
