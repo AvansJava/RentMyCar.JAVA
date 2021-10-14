@@ -31,7 +31,7 @@ public class CarService {
         this.modelMapper = modelMapper;
     }
 
-    public List<CarDto> getCarList() {
+    public List<CarDto> getCarsList() {
         return carRepository.findAll()
                 .stream()
                 .map(obj -> modelMapper.map(obj, CarDto.class))

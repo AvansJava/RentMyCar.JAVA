@@ -27,17 +27,17 @@ public class CarController {
     }
 
     @GetMapping(path="list/")
-    public List<CarDto> getCars() {
+    public List<CarDto> getCarsList() {
         User user = userService.getAuthenticatedUser();
-        return carService.getCarList();
+        return carService.getCarsList();
     }
 
-//    @PostMapping
-//    public Car postCar(@RequestBody Car car) {
-//        User user = userService.getAuthenticatedUser();
-//
-//        return carService.createCar(car, user);
-//    }
+   @PostMapping
+   public Car postCar(@RequestBody Car car) {
+       User user = userService.getAuthenticatedUser();
+
+       return carService.createCar(car, user);
+   }
 
     @PutMapping(path = "{id}/")
     public Car putCar(@PathVariable("id") Long id, @RequestBody Car newCar) {
