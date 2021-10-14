@@ -1,14 +1,11 @@
 package com.rentmycar.rentmycar.rent.service;
 
-import com.rentmycar.rentmycar.common.model.Car;
+import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.rent.dto.RentCarDto;
-import com.rentmycar.rentmycar.rent.dto.RentCarListDto;
+
 import com.rentmycar.rentmycar.rent.repository.RentCarRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class RentCarService {

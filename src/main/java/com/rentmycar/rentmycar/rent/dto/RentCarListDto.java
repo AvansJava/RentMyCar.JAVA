@@ -1,6 +1,7 @@
 package com.rentmycar.rentmycar.rent.dto;
 
-import com.rentmycar.rentmycar.common.enums.CarType;
+
+import com.rentmycar.rentmycar.enums.CarType;
 import lombok.Getter;
 import lombok.Setter;
 

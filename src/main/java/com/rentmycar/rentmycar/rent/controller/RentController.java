@@ -1,12 +1,11 @@
 package com.rentmycar.rentmycar.rent.controller;
 
-import com.rentmycar.rentmycar.common.model.Car;
-import com.rentmycar.rentmycar.common.model.User;
-import com.rentmycar.rentmycar.common.service.UserService;
+import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.rent.dto.RentCarDto;
 import com.rentmycar.rentmycar.rent.dto.RentCarListDto;
 import com.rentmycar.rentmycar.rent.service.RentCarListService;
 import com.rentmycar.rentmycar.rent.service.RentCarService;
+import com.rentmycar.rentmycar.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
