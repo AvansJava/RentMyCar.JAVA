@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Reservation {
     @Id
+    @Column(columnDefinition = "char(10)")
     private String reservationNumber;
     @ManyToOne
     @JoinColumn(nullable = false, name = "user_id")
