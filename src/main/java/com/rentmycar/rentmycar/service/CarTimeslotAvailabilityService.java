@@ -1,6 +1,7 @@
 package com.rentmycar.rentmycar.service;
 
 import com.rentmycar.rentmycar.dto.AvailabilityStatusDto;
+import com.rentmycar.rentmycar.dto.CarDto;
 import com.rentmycar.rentmycar.dto.CarTimeslotAvailabilityDto;
 import com.rentmycar.rentmycar.enums.TimeSlotAvailabilityStatus;
 import com.rentmycar.rentmycar.model.*;
@@ -13,7 +14,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CarTimeslotAvailabilityService {
@@ -79,4 +83,40 @@ public class CarTimeslotAvailabilityService {
         return modelMapper.map(carTimeslotAvailabilityRepository.save(timeslot), CarTimeslotAvailabilityDto.class);
     }
 
+    public List<CarDto> getAvailabilityBetweenDates(LocalDate startDate, LocalDate endDate) {
+
+        // Retrieve a list of days between the specified rental period
+        List<LocalDate> days = startDate.datesUntil(endDate).collect(Collectors.toList());
+
+        // Amount of timeslots that need to be free for the car to be available the whole day
+        int count = timeslotRepository.findAll().size();
+
+        /* Retrieve all cars that are available for rent, and instantiate an empty arraylist of cars to be filled
+         with cars that are free during the rental period
+         */
+        List<Car> cars = carTimeslotAvailabilityRepository.getAvailableCars();
+        List<Car> availableCars = new ArrayList<>();
+
+        for (Car car: cars) {
+            /* Instantiate empty list of booleans, to be filled with days that the car is available
+               Loop over the days and if the car is free, add to the list.
+             */
+            List<Boolean> fullDaysAvailable = new ArrayList<>();
+            for (LocalDate day : days) {
+                int freeTimeSlots = carTimeslotAvailabilityRepository.findAllFreeByDates(day.atStartOfDay(), day.plusDays(1).atStartOfDay(), car).size();
+                if (freeTimeSlots == count) {
+                    fullDaysAvailable.add(true);
+                }
+            }
+
+            // If the amount of days the car is available is the same as the requested rental period, the car is available for rental.
+            if (days.size() == fullDaysAvailable.size()) {
+                availableCars.add(car);
+            }
+        }
+
+        return availableCars.stream()
+                .map(obj -> modelMapper.map(obj, CarDto.class))
+                .collect(Collectors.toList());
+    }
 }
