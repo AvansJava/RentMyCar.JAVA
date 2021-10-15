@@ -7,6 +7,7 @@ import com.rentmycar.rentmycar.enums.TimeSlotAvailabilityStatus;
 import com.rentmycar.rentmycar.model.*;
 import com.rentmycar.rentmycar.repository.CarTimeslotAvailabilityRepository;
 import com.rentmycar.rentmycar.repository.TimeslotRepository;
+import org.apache.tomcat.jni.Local;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -84,6 +85,7 @@ public class CarTimeslotAvailabilityService {
     }
 
     public List<CarDto> getAvailabilityBetweenDates(LocalDate startDate, LocalDate endDate) {
+        validateDates(startDate, endDate);
 
         // Retrieve a list of days between the specified rental period
         List<LocalDate> days = startDate.datesUntil(endDate).collect(Collectors.toList());
@@ -118,5 +120,15 @@ public class CarTimeslotAvailabilityService {
         return availableCars.stream()
                 .map(obj -> modelMapper.map(obj, CarDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public void validateDates(LocalDate startDate, LocalDate endDate) {
+        if (endDate.isBefore(startDate)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End date needs to be after start date");
+        }
+
+        if (startDate.isBefore(LocalDate.now()) || endDate.isBefore(LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot select dates in the past.");
+        }
     }
 }

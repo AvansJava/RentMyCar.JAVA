@@ -6,6 +6,7 @@ import com.rentmycar.rentmycar.model.ConfirmationToken;
 import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.enums.UserRole;
 import com.rentmycar.rentmycar.validation.EmailValidator;
+import com.rentmycar.rentmycar.validation.PasswordValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,15 +22,22 @@ public class RegistrationService {
 
     private final UserService userService;
     private final EmailValidator emailValidator;
+    private final PasswordValidator passwordValidator;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
     public UUID register(RegistrationDto request) {
         String email = request.getEmail();
         boolean isValidEmail = emailValidator.test(email);
+        boolean isValidPassword = passwordValidator.test(request.getPassword());
 
         if (!isValidEmail) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-mail adres " + email + " is invalid.");
+        }
+
+        if (!isValidPassword) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Password should contain minimum 8 characters, at least one number and one letter.");
         }
 
         UUID token = userService.registerUser(new User(

@@ -34,7 +34,6 @@ public class UserService implements UserDetailsService {
         boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
 
         if (userExists) {
-            // TODO: if user is same but unconfirmed, resend verification e-mail
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exists.");
         }
 
@@ -53,9 +52,6 @@ public class UserService implements UserDetailsService {
         );
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-        // TODO: send e-mail with token
-
         return token;
     }
 
