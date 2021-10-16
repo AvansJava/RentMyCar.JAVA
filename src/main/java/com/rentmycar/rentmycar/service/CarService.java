@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -28,13 +29,15 @@ public class CarService {
     private final LocationService locationService;
     private final ModelMapper modelMapper;
     private final RentalPlanRepository rentalPlanRepository;
+    private final FileUploadService fileUploadService;
 
     @Autowired
-    public CarService(CarRepository carRepository, LocationService locationService, ModelMapper modelMapper, RentalPlanRepository rentalPlanRepository) {
+    public CarService(CarRepository carRepository, LocationService locationService, ModelMapper modelMapper, RentalPlanRepository rentalPlanRepository, FileUploadService fileUploadService) {
         this.carRepository = carRepository;
         this.locationService = locationService;
         this.modelMapper = modelMapper;
         this.rentalPlanRepository = rentalPlanRepository;
+        this.fileUploadService = fileUploadService;
     }
 
     public List<CarDto> getCarsList() {
@@ -155,5 +158,9 @@ public class CarService {
                 totalCostOwnership,
                 costPerKilometer
         );
+    }
+
+    public String uploadImage(Long id, MultipartFile file, User user) {
+        return fileUploadService.uploadImage(file);
     }
 }

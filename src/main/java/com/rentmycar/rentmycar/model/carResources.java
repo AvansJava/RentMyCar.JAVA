@@ -1,6 +1,5 @@
 package com.rentmycar.rentmycar.model;
 
-import com.rentmycar.rentmycar.enums.CarType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,30 +11,19 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "car")
+@Table(name = "car_resource")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Car {
+public class carResources {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String brand;
-    private String brandType;
-    private String model;
-    @Column(unique = true)
-    private String licensePlateNumber;
-    private Double consumption; // per 100km
-    private int costPrice;
-    @Enumerated(EnumType.STRING)
-    private CarType carType;
+    private String filePath;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "user_id")
-    private User user;
-    @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
+    @JoinColumn(nullable = false, name = "car_id")
+    private Car car;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

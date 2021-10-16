@@ -136,3 +136,13 @@ VALUES (1, 1, 1, '2021-11-01 07:00:00', 2, '2021-11-01 11:30:00', 'OPEN', CURREN
 
 INSERT INTO driver_activity (acceleration, average_speed, created_at, distance_driven, last_synced_at, top_speed, car_id, reservation_number)
 VALUES (10.6, 50, CURRENT_TIMESTAMP, 112.5, '2021-10-02 21:30:00', 170, 1, 'GK7K6JDK2P');
+
+INSERT INTO car_resource (file_path, car_id, created_at)
+VALUES ('E:\storage\fd2ae4e6-e6c3-494c-a2a7-3f63764b68f5.jpg', 1, CURRENT_TIMESTAMP),
+       ('E:\storage\88e8e3c7-31bc-4f30-b675-e95a1886b2d4.jpg', 1, CURRENT_TIMESTAMP),
+       ('E:\storage\13050f60-6a20-4072-bd73-042fdece5531.jpg', 1, CURRENT_TIMESTAMP),
+       ('E:\storage\3792f7ab-6d3f-4b62-bec8-0096e273c910.jpg', 2, CURRENT_TIMESTAMP),
+       ('E:\storage\638e06ea-86ea-4b86-b343-fecc43a6a8ed.jpg', 2, CURRENT_TIMESTAMP),
+       ('E:\storage\e694126c-107e-4111-9d67-cfe39588ef3a.jpg', 3, CURRENT_TIMESTAMP),
+       ('E:\storage\176d92d4-0ffd-4d2e-9ce8-c64cd91d4fe8.jpg', 3, CURRENT_TIMESTAMP),
+       ('E:\storage\de093bb3-2dab-4015-bcfc-9c547555be11.jpg', 4, CURRENT_TIMESTAMP);
