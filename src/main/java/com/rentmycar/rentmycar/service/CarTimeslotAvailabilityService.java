@@ -123,4 +123,5 @@ public class CarTimeslotAvailabilityService {
                 .map(obj -> modelMapper.map(obj, CarDto.class))
                 .collect(Collectors.toList());
     }
+
 }
