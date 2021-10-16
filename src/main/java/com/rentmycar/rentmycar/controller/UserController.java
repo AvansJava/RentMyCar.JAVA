@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.controller;
 
+import com.rentmycar.rentmycar.dto.UserDto;
 import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,13 @@ public class UserController {
     }
 
     @GetMapping
-    public User getUser() {
-        return userService.getAuthenticatedUser();
+    public UserDto getUser() {
+        return userService.getUser();
     }
 
-    @PutMapping(path = "/{id}/")
-    public User putUser(@RequestBody User user) {
-        return userService.updateUser(user);
+    @PutMapping
+    public UserDto putUser(@RequestBody User updatedUser) {
+        User user = userService.getAuthenticatedUser();
+        return userService.updateUser(user, updatedUser);
     }
 }

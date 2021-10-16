@@ -7,7 +7,7 @@ import com.rentmycar.rentmycar.enums.TimeSlotAvailabilityStatus;
 import com.rentmycar.rentmycar.model.*;
 import com.rentmycar.rentmycar.repository.CarTimeslotAvailabilityRepository;
 import com.rentmycar.rentmycar.repository.TimeslotRepository;
-import org.apache.tomcat.jni.Local;
+import com.rentmycar.rentmycar.validation.DateValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,13 +26,16 @@ public class CarTimeslotAvailabilityService {
     private final TimeslotRepository timeslotRepository;
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final DateValidator dateValidator;
 
     public CarTimeslotAvailabilityService(CarTimeslotAvailabilityRepository carTimeslotAvailabilityRepository,
-                                          TimeslotRepository timeslotRepository, UserService userService, ModelMapper modelMapper) {
+                                          TimeslotRepository timeslotRepository, UserService userService,
+                                          ModelMapper modelMapper, DateValidator dateValidator) {
         this.carTimeslotAvailabilityRepository = carTimeslotAvailabilityRepository;
         this.timeslotRepository = timeslotRepository;
         this.userService = userService;
         this.modelMapper = modelMapper;
+        this.dateValidator = dateValidator;
     }
 
     public void postAvailability(LocalDate day, Car car, RentalPlan rentalPlan) {
@@ -85,7 +87,7 @@ public class CarTimeslotAvailabilityService {
     }
 
     public List<CarDto> getAvailabilityBetweenDates(LocalDate startDate, LocalDate endDate) {
-        validateDates(startDate, endDate);
+        dateValidator.validateDates(startDate, endDate);
 
         // Retrieve a list of days between the specified rental period
         List<LocalDate> days = startDate.datesUntil(endDate).collect(Collectors.toList());
@@ -120,15 +122,5 @@ public class CarTimeslotAvailabilityService {
         return availableCars.stream()
                 .map(obj -> modelMapper.map(obj, CarDto.class))
                 .collect(Collectors.toList());
-    }
-
-    public void validateDates(LocalDate startDate, LocalDate endDate) {
-        if (endDate.isBefore(startDate)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End date needs to be after start date");
-        }
-
-        if (startDate.isBefore(LocalDate.now()) || endDate.isBefore(LocalDate.now())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot select dates in the past.");
-        }
     }
 }

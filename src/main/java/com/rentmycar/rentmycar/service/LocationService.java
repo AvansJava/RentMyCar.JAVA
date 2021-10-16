@@ -1,6 +1,5 @@
 package com.rentmycar.rentmycar.service;
 
-import com.rentmycar.rentmycar.dto.CarList;
 import com.rentmycar.rentmycar.dto.LocationDto;
 import com.rentmycar.rentmycar.model.Location;
 import com.rentmycar.rentmycar.model.User;

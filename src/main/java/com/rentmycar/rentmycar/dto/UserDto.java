@@ -1,22 +1,18 @@
 package com.rentmycar.rentmycar.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
-@AllArgsConstructor
-@EqualsAndHashCode
-@ToString
+@Setter
 public class UserDto {
-    private final String firstName;
-    private final String lastName;
-    private final String street;
-    private final String houseNumber;
-    private final String postalCode;
-    private final String city;
-    private final String country;
-    private final String phoneNumber;
-    private final String iban;
+    private String firstName;
+    private String lastName;
+    private String street;
+    private String houseNumber;
+    private String postalCode;
+    private String city;
+    private String country;
+    private String phoneNumber;
+    private String iban;
+    private String email;
 }
