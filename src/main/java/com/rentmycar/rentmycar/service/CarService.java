@@ -3,13 +3,11 @@ package com.rentmycar.rentmycar.service;
 import com.rentmycar.rentmycar.dto.CarDto;
 import com.rentmycar.rentmycar.dto.TcoDto;
 import com.rentmycar.rentmycar.enums.CarType;
-import com.rentmycar.rentmycar.model.RentalPlan;
+import com.rentmycar.rentmycar.model.*;
+import com.rentmycar.rentmycar.repository.CarResourceRepository;
 import com.rentmycar.rentmycar.repository.RentalPlanRepository;
 import org.modelmapper.ModelMapper;
 
-import com.rentmycar.rentmycar.model.Car;
-import com.rentmycar.rentmycar.model.Location;
-import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,14 +28,16 @@ public class CarService {
     private final ModelMapper modelMapper;
     private final RentalPlanRepository rentalPlanRepository;
     private final FileUploadService fileUploadService;
+    private final CarResourceRepository carResourceRepository;
 
     @Autowired
-    public CarService(CarRepository carRepository, LocationService locationService, ModelMapper modelMapper, RentalPlanRepository rentalPlanRepository, FileUploadService fileUploadService) {
+    public CarService(CarRepository carRepository, LocationService locationService, ModelMapper modelMapper, RentalPlanRepository rentalPlanRepository, FileUploadService fileUploadService, CarResourceRepository carResourceRepository) {
         this.carRepository = carRepository;
         this.locationService = locationService;
         this.modelMapper = modelMapper;
         this.rentalPlanRepository = rentalPlanRepository;
         this.fileUploadService = fileUploadService;
+        this.carResourceRepository = carResourceRepository;
     }
 
     public List<CarDto> getCarsList() {
@@ -66,11 +66,8 @@ public class CarService {
     }
 
     public CarDto updateCar(Long id, Car newCar, User user) {
-        Car car = carRepository.getById(id);
+        Car car = findCarByUser(id, user);
 
-        if (user != car.getUser()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user");
-        }
         car.setBrand(newCar.getBrand());
         car.setBrandType(newCar.getBrandType());
         car.setModel(newCar.getModel());
@@ -90,21 +87,12 @@ public class CarService {
     }
 
     public CarDto getCarByUser(Long id, User user) {
-        Car car = carRepository.getById(id);
-
-        if (car.getUser() != user) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
-        }
-
+        Car car = findCarByUser(id, user);
         return modelMapper.map(car, CarDto.class);
     }
 
     public ResponseEntity<String> deleteCar(Long id, User user) {
-        Car car = carRepository.getById(id);
-
-        if (car.getUser() != user) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
-        }
+        Car car = findCarByUser(id, user);
 
         Optional<RentalPlan> rentalPlan = rentalPlanRepository.findAllByCar(car);
         if (rentalPlan.isPresent()) {
@@ -116,15 +104,7 @@ public class CarService {
     }
 
     public TcoDto calculateCarTco(Long id, User user, int km) {
-       Optional<Car> carOptional = carRepository.findById(id);
-       if(carOptional.isEmpty()) {
-           throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found.");
-       }
-       Car car = carOptional.get();
-
-        if (car.getUser() != user) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
-        }
+        Car car = findCarByUser(id, user);
 
         // Cars depreciate at an average of 20% year. This method uses that average.
         Double depreciation = car.getCostPrice() * 0.2;
@@ -160,7 +140,26 @@ public class CarService {
         );
     }
 
-    public String uploadImage(Long id, MultipartFile file, User user) {
-        return fileUploadService.uploadImage(file);
+    public ResponseEntity<String> uploadImage(Long id, MultipartFile file, User user) {
+        Car car = findCarByUser(id, user);
+        String filePath = fileUploadService.uploadImage(file);
+
+        CarResource carResource = new CarResource(filePath,car);
+        carResourceRepository.save(carResource);
+
+        return new ResponseEntity<>("File successfully uploaded", HttpStatus.CREATED);
+    }
+
+    private Car findCarByUser(Long id, User user) {
+        Optional<Car> carOptional = carRepository.findById(id);
+        if(carOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found.");
+        }
+        Car car = carOptional.get();
+
+        if (car.getUser() != user) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
+        }
+        return car;
     }
 }

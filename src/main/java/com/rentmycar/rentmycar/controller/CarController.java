@@ -71,7 +71,7 @@ public class CarController {
     }
 
     @PostMapping(path = "{id}/upload")
-    public String uploadCarImage(@PathVariable("id") Long id, @RequestParam("file")MultipartFile file) {
+    public ResponseEntity<String> uploadCarImage(@PathVariable("id") Long id, @RequestParam("file")MultipartFile file) {
         User user = userService.getAuthenticatedUser();
         return carService.uploadImage(id, file, user);
     }
