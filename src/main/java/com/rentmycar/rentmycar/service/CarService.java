@@ -1,6 +1,8 @@
 package com.rentmycar.rentmycar.service;
 
 import com.rentmycar.rentmycar.dto.CarDto;
+import com.rentmycar.rentmycar.dto.TcoDto;
+import com.rentmycar.rentmycar.enums.CarType;
 import com.rentmycar.rentmycar.model.RentalPlan;
 import com.rentmycar.rentmycar.repository.RentalPlanRepository;
 import org.modelmapper.ModelMapper;
@@ -71,6 +73,7 @@ public class CarService {
         car.setModel(newCar.getModel());
         car.setLicensePlateNumber(newCar.getLicensePlateNumber());
         car.setConsumption(newCar.getConsumption());
+        car.setCostPrice(newCar.getCostPrice());
         car.setCarType(newCar.getCarType());
 
         return modelMapper.map(carRepository.save(car), CarDto.class);
@@ -107,5 +110,48 @@ public class CarService {
 
         carRepository.delete(car);
         return new ResponseEntity<>("Car successfully deleted.", HttpStatus.OK);
+    }
+
+    public TcoDto calculateCarTco(Long id, User user, int km) {
+       Optional<Car> carOptional = carRepository.findById(id);
+       if(carOptional.isEmpty()) {
+           throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found.");
+       }
+       Car car = carOptional.get();
+
+        if (car.getUser() != user) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
+        }
+
+        // Cars depreciate at an average of 20% year. This method uses that average.
+        Double depreciation = car.getCostPrice() * 0.2;
+
+        CarType carType = car.getCarType();
+        double costPerUnit = 0.00;
+        switch (carType) {
+            case BEV:
+                costPerUnit = 0.2; // €/kWh
+                break;
+            case ICE:
+                costPerUnit = 1.90; // €/l
+                break;
+            case FCEV:
+                costPerUnit = 2.03; // €/kg
+                break;
+        }
+
+        // Calculates yearly fuel cost based on cpu of carType and consumption and provided kms in request
+        Double yearlyFuelCost = costPerUnit * car.getConsumption() * (km / 100);
+        Double totalCostOwnership = depreciation + yearlyFuelCost;
+
+        return new TcoDto (
+                car.getId(),
+                car.getConsumption(),
+                km,
+                car.getCostPrice(),
+                depreciation,
+                yearlyFuelCost,
+                totalCostOwnership
+        );
     }
 }

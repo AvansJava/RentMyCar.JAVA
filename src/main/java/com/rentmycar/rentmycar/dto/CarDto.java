@@ -15,6 +15,7 @@ public class CarDto {
     private String model;
     private String licensePlateNumber;
     private Double consumption;
+    private int costPrice;
     private CarType carType;
     private Long userId;
     private Long locationId;

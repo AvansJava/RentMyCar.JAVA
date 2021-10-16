@@ -28,7 +28,8 @@ public class Car {
     private String model;
     @Column(unique = true)
     private String licensePlateNumber;
-    private Double consumption;
+    private Double consumption; // per 100km
+    private int costPrice;
     @Enumerated(EnumType.STRING)
     private CarType carType;
     @ManyToOne
