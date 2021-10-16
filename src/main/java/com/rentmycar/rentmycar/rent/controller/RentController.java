@@ -2,6 +2,7 @@ package com.rentmycar.rentmycar.rent.controller;
 
 import com.rentmycar.rentmycar.dto.CarDto;
 import com.rentmycar.rentmycar.model.User;
+import com.rentmycar.rentmycar.rent.dto.RentCarAvailabilityDto;
 import com.rentmycar.rentmycar.rent.dto.RentCarDto;
 import com.rentmycar.rentmycar.rent.dto.RentCarListDto;
 import com.rentmycar.rentmycar.rent.service.RentCarFilter;
@@ -48,7 +49,6 @@ public class RentController {
         return rentCarFilter.getFilteredCars(LocalDate.parse(startDate),
                                              LocalDate.parse(endDate),
                                              brand);
-//        return carTimeslotAvailabilityService.getAvailabilityBetweenDates(LocalDate.parse(startDate), LocalDate.parse(endDate));
     }
 
     @GetMapping(path="{id}/")
@@ -57,5 +57,10 @@ public class RentController {
         return rentCarService.getCarById(id);
     }
 
+    @GetMapping(path="{id}/availability/")
+    public List<RentCarAvailabilityDto> getCarAvailability(@PathVariable("id") Long id) {
+        User user = userService.getAuthenticatedUser();
+        return rentCarService.getCarAvailability(id);
+    }
 
 }
