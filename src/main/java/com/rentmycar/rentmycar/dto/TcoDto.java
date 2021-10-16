@@ -15,4 +15,5 @@ public class TcoDto {
     private Double depreciation;
     private Double yearlyFuelCost;
     private Double totalCostOwnership;
+    private Double costPerKilometer;
 }

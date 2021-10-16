@@ -143,6 +143,7 @@ public class CarService {
         // Calculates yearly fuel cost based on cpu of carType and consumption and provided kms in request
         Double yearlyFuelCost = costPerUnit * car.getConsumption() * (km / 100);
         Double totalCostOwnership = depreciation + yearlyFuelCost;
+        Double costPerKilometer = (car.getConsumption() / 100) * costPerUnit;
 
         return new TcoDto (
                 car.getId(),
@@ -151,7 +152,8 @@ public class CarService {
                 car.getCostPrice(),
                 depreciation,
                 yearlyFuelCost,
-                totalCostOwnership
+                totalCostOwnership,
+                costPerKilometer
         );
     }
 }
