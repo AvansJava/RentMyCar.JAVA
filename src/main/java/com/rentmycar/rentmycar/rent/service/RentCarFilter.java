@@ -1,14 +1,12 @@
 package com.rentmycar.rentmycar.rent.service;
 
 import com.rentmycar.rentmycar.dto.CarDto;
-import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.rent.repository.RentCarRepository;
 import com.rentmycar.rentmycar.service.CarTimeslotAvailabilityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,8 +33,7 @@ public class RentCarFilter {
         }
 
         if (brand != null) {
-            System.out.println(brand);
-            availableCars.removeIf(car -> !car.getBrand().contains(brand));
+            availableCars.removeIf(car -> !car.getBrand().toLowerCase().contains(brand.toLowerCase()));
         }
         return availableCars.stream()
                 .map(obj -> modelMapper.map(obj, CarDto.class))
