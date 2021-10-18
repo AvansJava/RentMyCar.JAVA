@@ -17,7 +17,6 @@ public class PaymentDto {
     private BigDecimal price;
     private PaymentStatus paymentStatus;
     private PaymentMethod paymentMethod;
-    private Boolean isPayout;
     private LocalDateTime paidAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

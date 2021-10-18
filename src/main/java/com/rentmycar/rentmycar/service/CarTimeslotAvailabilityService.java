@@ -38,6 +38,14 @@ public class CarTimeslotAvailabilityService {
         this.dateValidator = dateValidator;
     }
 
+    public void cancelTimeslotReservation(Product product) {
+        List<CarTimeslotAvailability> timeslots = carTimeslotAvailabilityRepository.findAllByProduct(product);
+
+        for(CarTimeslotAvailability timeslot: timeslots) {
+            carTimeslotAvailabilityRepository.removeProduct(product);
+        }
+    }
+
     public void postAvailability(LocalDate day, Car car, RentalPlan rentalPlan) {
         User user = userService.getAuthenticatedUser();
 

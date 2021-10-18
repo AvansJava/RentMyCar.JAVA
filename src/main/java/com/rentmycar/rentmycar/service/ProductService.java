@@ -33,10 +33,12 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CarTimeslotAvailabilityRepository carTimeslotAvailabilityRepository;
     private final ModelMapper modelMapper;
+    private final CarTimeslotAvailabilityService carTimeslotAvailabilityService;
 
     public ProductDto createProduct(ProductRequestDto productRequest, Reservation reservation) {
         List<CarTimeslotAvailability> timeslots = productRequest.getTimeslots();
 
+        // Loop through selected timeslots and calculate price. Add to total.
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (CarTimeslotAvailability timeslot: timeslots) {
             CarTimeslotAvailability productTimeslot = getTimeslot(timeslot);
@@ -48,6 +50,7 @@ public class ProductService {
             totalPrice = totalPrice.add(price);
         }
 
+        // Create product
         Product product = new Product(
             reservation,
             totalPrice,
@@ -58,6 +61,7 @@ public class ProductService {
         );
         Product createdProduct = productRepository.save(product);
 
+        // Update timeslots with product_id to secure the reservation
         for (CarTimeslotAvailability timeslot: timeslots) {
             carTimeslotAvailabilityRepository.updateWithProduct(createdProduct, getTimeslot(timeslot).getId());
         }
@@ -73,5 +77,38 @@ public class ProductService {
         }
 
         return carTimeslotAvailability.get();
+    }
+
+    public void completeProduct(Reservation reservation) {
+        Product product = getProduct(reservation);
+
+        product.setStatus(ProductStatus.COMPLETED);
+        try {
+            productRepository.save(product);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Product could not be updated.");
+        }
+    }
+
+    public void cancelProduct(Reservation reservation) {
+        Product product = getProduct(reservation);
+        product.setStatus(ProductStatus.CANCELED);
+
+        carTimeslotAvailabilityService.cancelTimeslotReservation(product);
+
+        try {
+            productRepository.save(product);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Product could not be updated.");
+        }
+    }
+
+    public Product getProduct(Reservation reservation) {
+        Optional<Product> productOptional = productRepository.getByReservation(reservation);
+
+        if (productOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product could not be found.");
+        }
+        return productOptional.get();
     }
 }

@@ -22,7 +22,7 @@ public interface CarTimeslotAvailabilityRepository extends JpaRepository<CarTime
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM CarTimeslotAvailability WHERE rentalPlan = ?1")
+    @Query("DELETE FROM CarTimeslotAvailability WHERE rentalPlan = ?1 ")
     void deleteAllByRentalPlan(RentalPlan rentalPlan);
 
     @Query("SELECT c " +
@@ -39,6 +39,13 @@ public interface CarTimeslotAvailabilityRepository extends JpaRepository<CarTime
     @Transactional
     @Modifying
     @Query("UPDATE CarTimeslotAvailability " +
-            "SET product = ?1 WHERE id = ?2")
+            "SET product = ?1 WHERE id = ?2 ")
     void updateWithProduct(Product createdProduct, Long timeslotId);
+
+    List<CarTimeslotAvailability> findAllByProduct(Product product);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE CarTimeslotAvailability SET product = NULL WHERE product = ?1 ")
+    void removeProduct(Product product);
 }

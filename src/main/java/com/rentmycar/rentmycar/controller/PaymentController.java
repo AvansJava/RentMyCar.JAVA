@@ -1,9 +1,33 @@
 package com.rentmycar.rentmycar.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.rentmycar.rentmycar.dto.CallbackDto;
+import com.rentmycar.rentmycar.dto.PaymentDto;
+import com.rentmycar.rentmycar.model.Car;
+import com.rentmycar.rentmycar.model.Payment;
+import com.rentmycar.rentmycar.model.User;
+import com.rentmycar.rentmycar.service.PaymentService;
+import com.rentmycar.rentmycar.service.UserService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping(path="api/v1.0/payment/")
 public class PaymentController {
+
+    private final UserService userService;
+    private final PaymentService paymentService;
+
+    @PostMapping
+    public ResponseEntity<PaymentDto> postPayment(@RequestBody Payment payment) {
+        User user = userService.getAuthenticatedUser();
+
+        return paymentService.createPayment(payment, user);
+    }
+
+    @PostMapping(path = "{id}/callback/")
+    public ResponseEntity<String> receivePaymentCallback(@PathVariable("id") Long id, @RequestBody CallbackDto callback) {
+        return paymentService.processCallback(id, callback);
+    }
 }

@@ -34,7 +34,6 @@ public class Payment {
     private PaymentStatus paymentStatus;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
-    private Boolean isPayout;
     private LocalDateTime paidAt;
     @CreationTimestamp
     private LocalDateTime createdAt;
