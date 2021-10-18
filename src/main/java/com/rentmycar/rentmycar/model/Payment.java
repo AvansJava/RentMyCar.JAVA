@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.model;
 
+import com.rentmycar.rentmycar.enums.PaymentMethod;
 import com.rentmycar.rentmycar.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +32,8 @@ public class Payment {
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
     private Boolean isPayout;
     private LocalDateTime paidAt;
     @CreationTimestamp

@@ -29,13 +29,22 @@ public class Product {
     @ManyToOne
     @JoinColumn(nullable = false, name = "rental_plan_id")
     private RentalPlan rentalPlan;
-    @OneToOne
-    @JoinColumn(nullable = false, name = "insurance_type_id")
-    private Insurance insuranceTypeId;
+    private String insuranceTypeId;
+    private BigDecimal insurancePrice;
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Product(Reservation reservation, BigDecimal price, RentalPlan rentalPlan, String insuranceTypeId,
+                   BigDecimal insurancePrice, ProductStatus status) {
+        this.reservation = reservation;
+        this.price = price;
+        this.rentalPlan = rentalPlan;
+        this.insuranceTypeId = insuranceTypeId;
+        this.insurancePrice = insurancePrice;
+        this.status = status;
+    }
 }

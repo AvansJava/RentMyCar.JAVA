@@ -2,6 +2,7 @@ package com.rentmycar.rentmycar.repository;
 
 import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.model.CarTimeslotAvailability;
+import com.rentmycar.rentmycar.model.Product;
 import com.rentmycar.rentmycar.model.RentalPlan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -34,4 +35,10 @@ public interface CarTimeslotAvailabilityRepository extends JpaRepository<CarTime
 
     @Query("SELECT DISTINCT c.car FROM CarTimeslotAvailability c WHERE c.status = 'OPEN' AND c.product IS NULL")
     List<Car> getAvailableCars();
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE CarTimeslotAvailability " +
+            "SET product = ?1 WHERE id = ?2")
+    void updateWithProduct(Product createdProduct, Long timeslotId);
 }

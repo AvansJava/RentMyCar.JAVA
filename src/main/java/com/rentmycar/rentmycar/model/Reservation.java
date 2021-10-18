@@ -33,4 +33,10 @@ public class Reservation {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Reservation(String reservationNumber, User user, ReservationStatus status) {
+        this.reservationNumber = reservationNumber;
+        this.user = user;
+        this.status = status;
+    }
 }

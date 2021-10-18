@@ -1,7 +1,10 @@
 package com.rentmycar.rentmycar.util;
 
+import org.springframework.stereotype.Service;
+
 import java.security.SecureRandom;
 
+@Service
 public interface ReservationNumberGenerator {
 
     String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";

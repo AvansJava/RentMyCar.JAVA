@@ -15,6 +15,7 @@ public class ReservationDto {
     private BigDecimal price;
     private ReservationStatus status;
     private LocalDateTime paidAt;
+    private ProductDto product;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
