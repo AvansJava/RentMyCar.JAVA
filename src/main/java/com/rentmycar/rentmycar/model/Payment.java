@@ -23,11 +23,15 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(nullable = false, name = "reservation_number")
+    @JoinColumn(nullable = true, name = "reservation_number")
     private Reservation reservation;
+    @ManyToOne
+    @JoinColumn(nullable = true, name="user_id")
+    private User user;
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
+    private Boolean isPayout;
     private LocalDateTime paidAt;
     @CreationTimestamp
     private LocalDateTime createdAt;

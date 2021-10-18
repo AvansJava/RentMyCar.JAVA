@@ -57,6 +57,7 @@ public class CarService {
         }
         car.setUser(user);
 
+        // If location is in post request, create that as well.
         Location location = car.getLocation();
         if (location != null) {
             locationService.createLocation(location, user);
@@ -109,6 +110,8 @@ public class CarService {
         // Cars depreciate at an average of 20% year. This method uses that average.
         Double depreciation = car.getCostPrice() * 0.2;
 
+        // costPerUnit are fixed prices.
+        // TODO: integrate external API for up-to-date electricity, hydrogen and fuel costs.
         CarType carType = car.getCarType();
         double costPerUnit = 0.00;
         switch (carType) {
@@ -116,14 +119,14 @@ public class CarService {
                 costPerUnit = 0.2; // €/kWh
                 break;
             case ICE:
-                costPerUnit = 1.90; // €/l
+                costPerUnit = 1.75; // €/l
                 break;
             case FCEV:
                 costPerUnit = 2.03; // €/kg
                 break;
         }
 
-        // Calculates yearly fuel cost based on cpu of carType and consumption and provided kms in request
+        // Calculates yearly fuel cost based on costPerUnit of carType and consumption and provided kms in request
         Double yearlyFuelCost = costPerUnit * car.getConsumption() * (km / 100);
         Double totalCostOwnership = depreciation + yearlyFuelCost;
         Double costPerKilometer = (car.getConsumption() / 100) * costPerUnit;

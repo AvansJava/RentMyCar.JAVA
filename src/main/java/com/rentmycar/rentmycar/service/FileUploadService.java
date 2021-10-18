@@ -14,6 +14,8 @@ import java.util.UUID;
 
 @Service
 public class FileUploadService {
+
+    // Local directory where files are stored. Replace with your own folder.
     private static String UPLOAD_DIRECTORY = "E://storage//";
 
     public String uploadImage(MultipartFile file) {
