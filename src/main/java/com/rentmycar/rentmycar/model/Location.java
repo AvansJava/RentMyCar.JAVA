@@ -44,4 +44,15 @@ public class Location {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Location(String street, String houseNumber, String postalCode, String city, String country, Float latitude, Float longitude, User user) {
+        this.street = street;
+        this.houseNumber = houseNumber;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.country = country;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.user = user;
+    }
 }
