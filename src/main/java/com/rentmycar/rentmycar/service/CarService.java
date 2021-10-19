@@ -153,7 +153,7 @@ public class CarService {
         return new ResponseEntity<>("File successfully uploaded", HttpStatus.CREATED);
     }
 
-    private Car findCarByUser(Long id, User user) {
+    public Car findCarByUser(Long id, User user) {
         Optional<Car> carOptional = carRepository.findById(id);
         if(carOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found.");

@@ -88,7 +88,7 @@ public class ReservationService implements ReservationNumberGenerator {
         return getProductAndMapToDto(reservation);
     }
 
-    private Reservation findReservationByUser(String reservationNumber, User user) {
+    public Reservation findReservationByUser(String reservationNumber, User user) {
         Optional<Reservation> reservationOptional = reservationRepository.findById(reservationNumber);
 
         if (reservationOptional.isEmpty()) {
