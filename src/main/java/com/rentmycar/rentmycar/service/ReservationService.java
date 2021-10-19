@@ -18,6 +18,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,9 +29,17 @@ public class ReservationService implements ReservationNumberGenerator {
     private final ReservationRepository reservationRepository;
     private final ProductService productService;
     private final ModelMapper modelMapper;
+    private final CarTimeslotAvailabilityService carTimeslotAvailabilityService;
 
     public ResponseEntity<ReservationDto> createReservation(User user, ProductRequestDto productRequest) {
-        // First create a new empty reservation
+        // Check availability of timeslots
+        boolean isAvailable = carTimeslotAvailabilityService.checkAvailability(productRequest.getTimeslots());
+
+        if (!isAvailable) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Selected timeslots are not available.");
+        }
+
+        // Create a new empty reservation
         Reservation reservation = new Reservation(
                 randomString(10),
                 user,
@@ -70,5 +81,47 @@ public class ReservationService implements ReservationNumberGenerator {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Reservation could not be updated.");
         }
+    }
+
+    public ReservationDto getReservationByUser(String reservationNumber, User user) {
+        Reservation reservation = findReservationByUser(reservationNumber, user);
+        return getProductAndMapToDto(reservation);
+    }
+
+    private Reservation findReservationByUser(String reservationNumber, User user) {
+        Optional<Reservation> reservationOptional = reservationRepository.findById(reservationNumber);
+
+        if (reservationOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation not found.");
+        }
+        Reservation reservation = reservationOptional.get();
+
+        if (reservation.getUser() != user) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Reservation does not belong to user.");
+        }
+        return reservation;
+    }
+
+    private ReservationDto getProductAndMapToDto(Reservation reservation) {
+        ProductDto productDto = modelMapper.map(productService.getProduct(reservation), ProductDto.class);
+        ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
+        reservationDto.setProduct(productDto);
+
+        return reservationDto;
+    }
+
+    public List<ReservationDto> getAllReservationsByUser(User user, ReservationStatus status) {
+        List<Reservation> reservations = reservationRepository.findAllByUser(user);
+
+        List<ReservationDto> reservationDtoList = new ArrayList<>();
+        for (Reservation reservation: reservations) {
+            reservationDtoList.add(getProductAndMapToDto(reservation));
+        }
+
+        if (status != null) {
+            reservationDtoList.removeIf(reservation -> !reservation.getStatus().toString().contains(status.toString()));
+        }
+
+        return reservationDtoList;
     }
 }

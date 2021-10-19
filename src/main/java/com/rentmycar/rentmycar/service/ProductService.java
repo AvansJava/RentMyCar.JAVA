@@ -41,7 +41,7 @@ public class ProductService {
         // Loop through selected timeslots and calculate price. Add to total.
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (CarTimeslotAvailability timeslot: timeslots) {
-            CarTimeslotAvailability productTimeslot = getTimeslot(timeslot);
+            CarTimeslotAvailability productTimeslot = carTimeslotAvailabilityService.getTimeslot(timeslot);
 
             BigDecimal hours = new BigDecimal(Duration.between(productTimeslot.getStartAt(), productTimeslot.getEndAt()).toHours());
             BigDecimal pricePerHour = productTimeslot.getRentalPlan().getPrice();
@@ -63,20 +63,10 @@ public class ProductService {
 
         // Update timeslots with product_id to secure the reservation
         for (CarTimeslotAvailability timeslot: timeslots) {
-            carTimeslotAvailabilityRepository.updateWithProduct(createdProduct, getTimeslot(timeslot).getId());
+            carTimeslotAvailabilityRepository.updateWithProduct(createdProduct, carTimeslotAvailabilityService.getTimeslot(timeslot).getId());
         }
 
         return modelMapper.map(createdProduct, ProductDto.class);
-    }
-
-    public CarTimeslotAvailability getTimeslot(CarTimeslotAvailability timeslot) {
-        Optional<CarTimeslotAvailability> carTimeslotAvailability = carTimeslotAvailabilityRepository.findById(timeslot.getId());
-
-        if (carTimeslotAvailability.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Timeslot could not be found.");
-        }
-
-        return carTimeslotAvailability.get();
     }
 
     public void completeProduct(Reservation reservation) {

@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -51,6 +53,7 @@ public class PaymentService {
 
         payment.setPrice(reservation.getPrice());
         payment.setPaymentStatus(PaymentStatus.PENDING);
+        payment.setUser(user);
 
         /* This is where a POST request to an external payment service provider would take place,
            with reservation number as an external reference.
@@ -95,5 +98,31 @@ public class PaymentService {
 
         paymentRepository.save(payment);
         return new ResponseEntity<>("Callback successfully processed.", HttpStatus.OK);
+    }
+
+    public PaymentDto getPaymentByUser(Long id, User user) {
+        Optional<Payment> paymentOptional = paymentRepository.findById(id);
+
+        if(paymentOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found.");
+        }
+        Payment payment = paymentOptional.get();
+
+        if (payment.getUser() != user) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Payment does not belong to user.");
+        }
+        return modelMapper.map(payment, PaymentDto.class);
+    }
+
+    public List<PaymentDto> getAllPaymentsByUser(PaymentStatus status, User user) {
+        List<PaymentDto> paymentlist = paymentRepository.findAllByUser(user).stream()
+                .map(obj -> modelMapper.map(obj, PaymentDto.class))
+                .collect(Collectors.toList());
+
+        if (status != null) {
+            paymentlist.removeIf(payment -> !payment.getPaymentStatus().toString().contains(status.toString()));
+        }
+
+        return paymentlist;
     }
 }

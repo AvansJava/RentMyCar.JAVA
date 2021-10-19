@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -132,4 +133,23 @@ public class CarTimeslotAvailabilityService {
                 .collect(Collectors.toList());
     }
 
+    public boolean checkAvailability(List<CarTimeslotAvailability> timeslots) {
+        for (CarTimeslotAvailability timeslot: timeslots) {
+            CarTimeslotAvailability availability = getTimeslot(timeslot);
+            if (availability.getProduct() != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public CarTimeslotAvailability getTimeslot(CarTimeslotAvailability timeslot) {
+        Optional<CarTimeslotAvailability> carTimeslotAvailability = carTimeslotAvailabilityRepository.findById(timeslot.getId());
+
+        if (carTimeslotAvailability.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Timeslot could not be found.");
+        }
+
+        return carTimeslotAvailability.get();
+    }
 }

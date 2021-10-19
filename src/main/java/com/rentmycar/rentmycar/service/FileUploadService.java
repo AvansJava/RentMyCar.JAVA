@@ -24,9 +24,19 @@ public class FileUploadService {
         }
 
         String fileName = UUID.randomUUID().toString();
+        String ext = FilenameUtils.getExtension(file.getOriginalFilename());
+        Path path = Paths.get(UPLOAD_DIRECTORY + fileName + "." + ext);
+
+        if (ext == null) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid file format.");
+        }
+
+        if (!(ext.equals("jpg") || ext.equals("png"))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only images with extension .jpg or .png are allowed.");
+        }
+
         try {
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOAD_DIRECTORY + fileName + "." + FilenameUtils.getExtension(file.getOriginalFilename()));
             Files.write(path, bytes);
             return path.toString();
         } catch (IOException e) {
