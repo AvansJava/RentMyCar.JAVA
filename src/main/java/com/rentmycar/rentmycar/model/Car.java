@@ -40,4 +40,16 @@ public class Car {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Car(String brand, String brandType, String model, String licensePlateNumber, Double consumption, int costPrice, CarType carType, User user, Location location) {
+        this.brand = brand;
+        this.brandType = brandType;
+        this.model = model;
+        this.licensePlateNumber = licensePlateNumber;
+        this.consumption = consumption;
+        this.costPrice = costPrice;
+        this.carType = carType;
+        this.user = user;
+        this.location = location;
+    }
 }
