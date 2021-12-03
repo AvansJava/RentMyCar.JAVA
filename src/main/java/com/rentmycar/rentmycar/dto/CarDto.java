@@ -1,6 +1,7 @@
 package com.rentmycar.rentmycar.dto;
 
 import com.rentmycar.rentmycar.enums.CarType;
+import com.rentmycar.rentmycar.model.Location;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,7 @@ public class CarDto {
     private int costPrice;
     private CarType carType;
     private Long userId;
-    private Long locationId;
+    private LocationDto location;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
