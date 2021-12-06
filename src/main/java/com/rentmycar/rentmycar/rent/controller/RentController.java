@@ -37,7 +37,7 @@ public class RentController {
     }
 
     @GetMapping(path="list/")
-    public List<RentCarListDto> cars() {
+    public List<CarDto> cars() {
         User user = userService.getAuthenticatedUser();
         return rentCarListService.getCarList();
     }
