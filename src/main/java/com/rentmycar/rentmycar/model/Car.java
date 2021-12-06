@@ -28,6 +28,7 @@ public class Car {
     private String licensePlateNumber;
     private Double consumption; // per 100km
     private int costPrice;
+    private String imagePath;
     @Enumerated(EnumType.STRING)
     private CarType carType;
     @ManyToOne

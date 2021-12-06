@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +20,8 @@ public class CarDto {
     private int costPrice;
     private CarType carType;
     private Long userId;
-    private LocationDto location;
+    private Long locationId;
+    private String imagePath;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

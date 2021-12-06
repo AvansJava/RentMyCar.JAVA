@@ -75,4 +75,5 @@ public class CarController {
         User user = userService.getAuthenticatedUser();
         return carService.uploadImage(id, file, user);
     }
+
 }
