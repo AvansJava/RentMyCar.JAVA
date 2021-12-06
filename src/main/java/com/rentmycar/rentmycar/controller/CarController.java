@@ -1,6 +1,7 @@
 package com.rentmycar.rentmycar.controller;
 
 import com.rentmycar.rentmycar.dto.CarDto;
+import com.rentmycar.rentmycar.dto.CarResourceDto;
 import com.rentmycar.rentmycar.dto.TcoDto;
 import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.model.User;
@@ -68,6 +69,11 @@ public class CarController {
                             @RequestParam int km) {
         User user = userService.getAuthenticatedUser();
         return carService.calculateCarTco(id, user, km);
+    }
+
+    @GetMapping(path = "{id}/resource")
+    public List<CarResourceDto> getCarResource(@PathVariable("id") Long id) {
+        return carService.getCarResource(id);
     }
 
     @PostMapping(path = "{id}/upload")

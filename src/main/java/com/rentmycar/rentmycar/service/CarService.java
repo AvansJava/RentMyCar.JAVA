@@ -1,6 +1,7 @@
 package com.rentmycar.rentmycar.service;
 
 import com.rentmycar.rentmycar.dto.CarDto;
+import com.rentmycar.rentmycar.dto.CarResourceDto;
 import com.rentmycar.rentmycar.dto.TcoDto;
 import com.rentmycar.rentmycar.enums.CarType;
 import com.rentmycar.rentmycar.model.*;
@@ -164,5 +165,17 @@ public class CarService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Car does not belong to user.");
         }
         return car;
+    }
+
+    public List<CarResourceDto> getCarResource(Long id) {
+        Optional<Car> carOptional = carRepository.findById(id);
+        if(carOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found.");
+        }
+        Car car = carOptional.get();
+
+        return carResourceRepository.findAllByCar(car).stream()
+                .map(obj -> modelMapper.map(obj, CarResourceDto.class))
+                .collect(Collectors.toList());
     }
 }
