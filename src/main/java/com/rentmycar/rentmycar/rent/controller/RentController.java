@@ -52,7 +52,7 @@ public class RentController {
     }
 
     @GetMapping(path="{id}/")
-    public RentCarDto getCar(@PathVariable("id") Long id) {
+    public CarDto getCar(@PathVariable("id") Long id) {
         User user = userService.getAuthenticatedUser();
         return rentCarService.getCarById(id);
     }

@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.rent.service;
 
+import com.rentmycar.rentmycar.dto.CarDto;
 import com.rentmycar.rentmycar.model.Car;
 import com.rentmycar.rentmycar.model.CarTimeslotAvailability;
 import com.rentmycar.rentmycar.rent.dto.RentCarAvailabilityDto;
@@ -27,10 +28,10 @@ public class RentCarService {
         this.modelMapper = modelMapper;
     }
 
-    public RentCarDto getCarById(Long id) {
+    public CarDto getCarById(Long id) {
         Car car = rentCarRepository.getById(id);
 
-        return modelMapper.map(car, RentCarDto.class);
+        return modelMapper.map(car, CarDto.class);
     }
 
     public List<RentCarAvailabilityDto> getCarAvailability(Long id) {
