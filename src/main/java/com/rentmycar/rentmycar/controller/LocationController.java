@@ -45,8 +45,7 @@ public class LocationController {
 
     @GetMapping(path = "{id}/")
     public LocationDto getLocation(@PathVariable("id") Long id) {
-        User user = userService.getAuthenticatedUser();
-        return locationService.getLocationById(id, user);
+        return locationService.getLocationById(id);
     }
 
     @DeleteMapping(path = "{id}/")

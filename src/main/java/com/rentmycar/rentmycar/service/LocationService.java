@@ -56,12 +56,9 @@ public class LocationService {
                 .collect(Collectors.toList());
     }
 
-    public LocationDto getLocationById(Long id, User user) {
+    public LocationDto getLocationById(Long id) {
         Location location = locationRepository.getById(id);
 
-        if (location.getUser() != user) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Location does not belong to user");
-        }
         return modelMapper.map(location, LocationDto.class);
     }
 
