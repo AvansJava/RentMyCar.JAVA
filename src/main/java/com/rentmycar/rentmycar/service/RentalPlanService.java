@@ -41,12 +41,8 @@ public class RentalPlanService {
                 .collect(Collectors.toList());
     }
 
-    public RentalPlanDto getRentalPlan(Long id, User user) {
+    public RentalPlanDto getRentalPlan(Long id) {
         RentalPlan rentalPlan = rentalPlanRepository.getById(id);
-
-        if (rentalPlan.getUser() != user) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Rental plan does not belong to user.");
-        }
 
         return modelMapper.map(rentalPlan, RentalPlanDto.class);
     }

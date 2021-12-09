@@ -31,8 +31,7 @@ public class RentalPlanController {
 
     @GetMapping(path = "{id}/")
     public RentalPlanDto getRentalPlan(@PathVariable("id") Long id) {
-        User user = userService.getAuthenticatedUser();
-        return rentalPlanService.getRentalPlan(id, user);
+               return rentalPlanService.getRentalPlan(id);
     }
 
     @PostMapping
