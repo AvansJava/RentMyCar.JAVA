@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 @RestController
 @RequestMapping(path="api/v1.0/cars/")
@@ -77,7 +78,7 @@ public class CarController {
     }
 
     @PostMapping(path = "{id}/upload")
-    public ResponseEntity<String> uploadCarImage(@PathVariable("id") Long id, @RequestParam("file")MultipartFile file) {
+    public ResponseEntity<String> uploadCarImage(@PathVariable("id") Long id, @RequestParam("file")MultipartFile file) throws IOException {
         User user = userService.getAuthenticatedUser();
         return carService.uploadImage(id, file, user);
     }

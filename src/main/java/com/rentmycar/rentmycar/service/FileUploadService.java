@@ -1,46 +1,57 @@
 package com.rentmycar.rentmycar.service;
 
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.http.HttpStatus;
+import com.rentmycar.rentmycar.model.ImgBBRes;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
+import java.util.Base64;
 
 @Service
 public class FileUploadService {
 
-    // Local directory where files are stored. Replace with your own folder.
-    private static String UPLOAD_DIRECTORY = "E://storage//";
+    private static String BASE_URL = "https://api.imgbb.com/1/upload?key=a6046a56f8b4c887f33b44d99cb0d7a0";
 
-    public String uploadImage(MultipartFile file) {
+    public String uploadImage(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Please select a file to upload.");
         }
 
-        String fileName = UUID.randomUUID().toString();
-        String ext = FilenameUtils.getExtension(file.getOriginalFilename());
-        Path path = Paths.get(UPLOAD_DIRECTORY + fileName + "." + ext);
+        MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
+        bodyMap.add("image", Base64.getEncoder().encode(file.getBytes()));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(bodyMap, headers);
 
-        if (ext == null) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid file format.");
-        }
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<ImgBBRes> response = restTemplate.exchange(BASE_URL, HttpMethod.POST, requestEntity, ImgBBRes.class);
 
-        if (!(ext.equals("jpg") || ext.equals("png"))) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only images with extension .jpg or .png are allowed.");
-        }
+        return response.getBody().getData().getDisplay_url();
 
-        try {
-            byte[] bytes = file.getBytes();
-            Files.write(path, bytes);
-            return path.toString();
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "File upload failed.");
-        }
+//        String fileName = UUID.randomUUID().toString();
+//        String ext = FilenameUtils.getExtension(file.getOriginalFilename());
+//        Path path = Paths.get(UPLOAD_DIRECTORY + fileName + "." + ext);
+//        String fullFileName = fileName + "." + ext;
+//
+//        if (ext == null) {
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid file format.");
+//        }
+//
+//        if (!(ext.equals("jpg") || ext.equals("png"))) {
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only images with extension .jpg or .png are allowed.");
+//        }
+//
+//        try {
+//            byte[] bytes = file.getBytes();
+//            Files.write(path, bytes);
+//            return fullFileName;
+//        } catch (IOException e) {
+//            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "File upload failed.");
+//        }
     }
 }

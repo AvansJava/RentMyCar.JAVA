@@ -1,5 +1,6 @@
 package com.rentmycar.rentmycar.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rentmycar.rentmycar.dto.CarDto;
 import com.rentmycar.rentmycar.dto.CarResourceDto;
 import com.rentmycar.rentmycar.dto.TcoDto;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -144,11 +147,11 @@ public class CarService {
         );
     }
 
-    public ResponseEntity<String> uploadImage(Long id, MultipartFile file, User user) {
+    public ResponseEntity<String> uploadImage(Long id, MultipartFile file, User user) throws IOException {
         Car car = findCarByUser(id, user);
-        String filePath = fileUploadService.uploadImage(file);
+        String imageUrl = fileUploadService.uploadImage(file);
 
-        CarResource carResource = new CarResource(filePath,car);
+        CarResource carResource = new CarResource(imageUrl,car);
         carResourceRepository.save(carResource);
 
         return new ResponseEntity<>("File successfully uploaded", HttpStatus.CREATED);
@@ -174,8 +177,18 @@ public class CarService {
         }
         Car car = carOptional.get();
 
-        return carResourceRepository.findAllByCar(car).stream()
+        List<CarResourceDto> results = carResourceRepository.findAllByCar(car).stream()
                 .map(obj -> modelMapper.map(obj, CarResourceDto.class))
                 .collect(Collectors.toList());
+
+        List<CarResourceDto> newList = new ArrayList<>();
+        for (CarResourceDto result: results) {
+            String newResult = result.getFilePath();
+            newResult = newResult.replaceAll("\\\\", "/");
+            result.setFilePath(newResult);
+            newList.add(result);
+        }
+
+        return newList;
     }
 }
