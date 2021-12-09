@@ -34,6 +34,11 @@ public class RentalPlanController {
                return rentalPlanService.getRentalPlan(id);
     }
 
+    @GetMapping(path = "car/{carId}/")
+    public RentalPlanDto getRentalPlanByCar(@PathVariable("carId") Long carId) {
+        return rentalPlanService.getRentalPlanByCar(carId);
+    }
+
     @PostMapping
     public ResponseEntity<RentalPlanDto> postRentalPlan(@RequestBody RentalPlan rentalPlan) {
         User user = userService.getAuthenticatedUser();

@@ -108,4 +108,22 @@ public class RentalPlanService {
         rentalPlanRepository.delete(rentalPlan);
         return new ResponseEntity<>("Rental plan successfully deleted.", HttpStatus.OK);
     }
+
+    public RentalPlanDto getRentalPlanByCar(Long carId) {
+
+        Optional<Car> carOptional = carRepository.findById(carId);
+
+        if (carOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car does not exist.");
+        }
+        Car car = carOptional.get();
+        Optional<RentalPlan> rentalPlanOptional = rentalPlanRepository.findAllByCar(car).stream().findFirst();
+
+        if (rentalPlanOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rental plan does not exist.");
+        }
+        RentalPlan rentalPlan = rentalPlanOptional.get();
+
+        return modelMapper.map(rentalPlan, RentalPlanDto.class);
+    }
 }
