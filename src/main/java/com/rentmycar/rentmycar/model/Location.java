@@ -33,10 +33,10 @@ public class Location {
     private String country;
     @Column(precision=10, scale=6)
     @NotNull
-    private Float latitude;
+    private Double latitude;
     @Column(precision=10, scale=6)
     @NotNull
-    private Float longitude;
+    private Double longitude;
     @ManyToOne
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
