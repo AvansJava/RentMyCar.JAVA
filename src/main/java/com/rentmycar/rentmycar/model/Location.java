@@ -31,10 +31,8 @@ public class Location {
     private String city;
     @NotNull
     private String country;
-    @Column(precision=10, scale=6)
     @NotNull
     private Double latitude;
-    @Column(precision=10, scale=6)
     @NotNull
     private Double longitude;
     @ManyToOne
