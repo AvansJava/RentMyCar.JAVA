@@ -17,7 +17,8 @@ public interface RentCarAvailabilityRepository extends JpaRepository<CarTimeslot
 
     @Query("SELECT c " +
             "FROM CarTimeslotAvailability c " +
-            "WHERE c.car = ?1 ")
+            "WHERE c.car = ?1 " +
+            "ORDER BY c.startAt ASC ")
     Page<CarTimeslotAvailability> getCarAvailability(Car car, Pageable page);
 
 //    Page<CarTimeslotAvailability> findAllByCar(Car car, Pageable page);
