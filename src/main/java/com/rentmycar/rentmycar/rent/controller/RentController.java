@@ -11,6 +11,7 @@ import com.rentmycar.rentmycar.rent.service.RentCarService;
 import com.rentmycar.rentmycar.service.CarTimeslotAvailabilityService;
 import com.rentmycar.rentmycar.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -58,9 +59,13 @@ public class RentController {
     }
 
     @GetMapping(path="{id}/availability/")
-    public List<RentCarAvailabilityDto> getCarAvailability(@PathVariable("id") Long id) {
+    public Page<RentCarAvailabilityDto> getCarAvailability(
+            @PathVariable("id") Long id,
+            @RequestParam int pageNumber,
+            @RequestParam int pageSize
+    ) {
         User user = userService.getAuthenticatedUser();
-        return rentCarService.getCarAvailability(id);
+        return rentCarService.getCarAvailability(id, pageNumber, pageSize);
     }
 
 }

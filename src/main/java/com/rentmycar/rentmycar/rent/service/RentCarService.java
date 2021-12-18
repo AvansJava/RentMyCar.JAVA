@@ -9,10 +9,16 @@ import com.rentmycar.rentmycar.rent.dto.RentCarDto;
 import com.rentmycar.rentmycar.rent.dto.RentCarListDto;
 import com.rentmycar.rentmycar.rent.repository.RentCarAvailabilityRepository;
 import com.rentmycar.rentmycar.rent.repository.RentCarRepository;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.spi.MappingContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,11 +40,16 @@ public class RentCarService {
         return modelMapper.map(car, CarDto.class);
     }
 
-    public List<RentCarAvailabilityDto> getCarAvailability(Long id) {
-        Car car = rentCarRepository.getById(id);
-        List<CarTimeslotAvailability> carAvailability =  rentCarAvailabilityRepository.getCarAvailability(car);
-        return carAvailability.stream()
-                .map(obj -> modelMapper.map(obj, RentCarAvailabilityDto.class))
-                .collect(Collectors.toList());
+    public Page<RentCarAvailabilityDto> getCarAvailability(Long id, int pageNumber, int pageSize) {
+        Pageable page = PageRequest.of(pageNumber, pageSize);
+            Car car = rentCarRepository.getById(id);
+        Page<CarTimeslotAvailability> carAvailability =  rentCarAvailabilityRepository.getCarAvailability(car, page);
+        return carAvailability.map(new Function<CarTimeslotAvailability, RentCarAvailabilityDto>() {
+
+            @Override
+            public RentCarAvailabilityDto apply(CarTimeslotAvailability carTimeslotAvailability) {
+                return modelMapper.map(carTimeslotAvailability, RentCarAvailabilityDto.class);
+            }
+        });
     }
 }
