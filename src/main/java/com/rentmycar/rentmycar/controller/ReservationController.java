@@ -1,8 +1,10 @@
 package com.rentmycar.rentmycar.controller;
 
+import com.rentmycar.rentmycar.dto.CarTimeslotAvailabilityDto;
 import com.rentmycar.rentmycar.dto.ProductRequestDto;
 import com.rentmycar.rentmycar.dto.ReservationDto;
 import com.rentmycar.rentmycar.enums.ReservationStatus;
+import com.rentmycar.rentmycar.model.CarTimeslotAvailability;
 import com.rentmycar.rentmycar.model.Reservation;
 import com.rentmycar.rentmycar.model.User;
 import com.rentmycar.rentmycar.service.ReservationService;
@@ -37,5 +39,11 @@ public class ReservationController {
     public List<ReservationDto> getReservations(@RequestParam(required=false) ReservationStatus status) {
         User user = userService.getAuthenticatedUser();
         return reservationService.getAllReservationsByUser(user, status);
+    }
+
+    @GetMapping(path = "{reservationNumber}/availability")
+    public List<CarTimeslotAvailabilityDto> getReservationAvailability(@PathVariable("reservationNumber") String reservationNumber) {
+        User user = userService.getAuthenticatedUser();
+        return reservationService.getReservationAvailabilityByReservation(reservationNumber, user);
     }
 }

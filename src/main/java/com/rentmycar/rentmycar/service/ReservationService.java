@@ -1,12 +1,12 @@
 package com.rentmycar.rentmycar.service;
 
-import com.rentmycar.rentmycar.dto.ProductDto;
-import com.rentmycar.rentmycar.dto.ProductRequestDto;
-import com.rentmycar.rentmycar.dto.ReservationDto;
+import com.rentmycar.rentmycar.dto.*;
 import com.rentmycar.rentmycar.enums.ReservationStatus;
+import com.rentmycar.rentmycar.model.CarTimeslotAvailability;
 import com.rentmycar.rentmycar.model.Product;
 import com.rentmycar.rentmycar.model.Reservation;
 import com.rentmycar.rentmycar.model.User;
+import com.rentmycar.rentmycar.repository.CarTimeslotAvailabilityRepository;
 import com.rentmycar.rentmycar.repository.ReservationRepository;
 import com.rentmycar.rentmycar.util.ReservationNumberGenerator;
 import lombok.AllArgsConstructor;
@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +31,7 @@ public class ReservationService implements ReservationNumberGenerator {
     private final ProductService productService;
     private final ModelMapper modelMapper;
     private final CarTimeslotAvailabilityService carTimeslotAvailabilityService;
+    private final CarTimeslotAvailabilityRepository carTimeslotAvailabilityRepository;
 
     public ResponseEntity<ReservationDto> createReservation(User user, ProductRequestDto productRequest) {
         // Check availability of timeslots
@@ -123,5 +125,13 @@ public class ReservationService implements ReservationNumberGenerator {
         }
 
         return reservationDtoList;
+    }
+
+    public List<CarTimeslotAvailabilityDto> getReservationAvailabilityByReservation(String reservationNumber, User user) {
+        Reservation reservation = findReservationByUser(reservationNumber, user);
+        Product product = productService.getProduct(reservation);
+        return carTimeslotAvailabilityRepository.findAllByProduct(product).stream()
+                .map(obj -> modelMapper.map(obj, CarTimeslotAvailabilityDto.class))
+                .collect(Collectors.toList());
     }
 }

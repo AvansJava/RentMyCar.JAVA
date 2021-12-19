@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CarTimeslotAvailabilityRepository extends JpaRepository<CarTimeslotAvailability, Long> {
@@ -48,4 +49,5 @@ public interface CarTimeslotAvailabilityRepository extends JpaRepository<CarTime
     @Modifying
     @Query("UPDATE CarTimeslotAvailability SET product = NULL WHERE product = ?1 ")
     void removeProduct(Product product);
+
 }
