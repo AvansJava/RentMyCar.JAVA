@@ -94,7 +94,7 @@ public class UserService implements UserDetailsService {
         String iban = updatedUser.getIban();
 
         if (firstName.isEmpty() || lastName.isEmpty() || street.isEmpty() || houseNumber.isEmpty() || city.isEmpty() ||
-        country.isEmpty() || phoneNumber.isEmpty() || iban.isEmpty() || email.isEmpty()) {
+        country.isEmpty() || phoneNumber.isEmpty() || email.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please fill out all required fields.");
         }
 
