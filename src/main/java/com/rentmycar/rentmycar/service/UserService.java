@@ -92,6 +92,7 @@ public class UserService implements UserDetailsService {
         String country = updatedUser.getCountry();
         String phoneNumber = updatedUser.getPhoneNumber();
         String iban = updatedUser.getIban();
+        String postalCode = updatedUser.getPostalCode();
 
         if (firstName.isEmpty() || lastName.isEmpty() || street.isEmpty() || houseNumber.isEmpty() || city.isEmpty() ||
         country.isEmpty() || phoneNumber.isEmpty() || email.isEmpty()) {
@@ -109,6 +110,7 @@ public class UserService implements UserDetailsService {
         user.setPhoneNumber(phoneNumber);
         user.setIban(iban);
         user.setEmail(email);
+        user.setPostalCode(postalCode);
 
         return  modelMapper.map(userRepository.save(user), UserDto.class);
     }
